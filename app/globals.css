@@ -51,7 +51,11 @@ h1{
   color: #0a0a0a;
   width: 20%;
 }
-
+/* Home Headings */
+.explore-heading{
+  display: flex;
+ justify-content: center;
+}
 /* All Categories Box */
 .cat-para{
   white-space: nowrap;

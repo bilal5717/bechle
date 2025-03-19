@@ -1,6 +1,5 @@
 "use client";
 import { useState, useEffect } from 'react';
-import sideBanner from '../../assets/BannerImages/sidebanner.png'
 
 const Carousel = ({ images }) => {
   const [current, setCurrent] = useState(0);

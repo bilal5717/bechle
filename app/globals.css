@@ -24,8 +24,12 @@ body {
   color: var(--foreground);
   font-family: 'Inter', sans-serif;
 }
-h1, h2, h3 {
-  font-family: 'Roboto', sans-serif;
+
+h1{
+  font-size: 1.5rem;
+  margin-top: 10px;
+  font-weight: 700;
+  margin-bottom: 8px;
 }
 .body-wrapper{
   width: 95%;
@@ -49,3 +53,39 @@ h1, h2, h3 {
 }
 
 /* All Categories Box */
+.cat-para{
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 100%;
+  display: block;
+  max-width: 100%;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 22px;
+  color: #00000099;
+  margin-bottom: 1rem;
+}
+.cat-cards{
+  display: flex;
+  width: calc(100% + 16px);
+  margin: -8px;
+      flex-wrap: wrap;
+      box-sizing: border-box;
+}
+.cat-card{
+  width: 8%;
+    display: block;
+    position: relative;
+    
+}
+.cat-card-body{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  flex-wrap: nowrap;
+}
+.card-title{
+  font-size: 12px;
+}

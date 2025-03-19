@@ -1,15 +1,19 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import TopNav from "./layout/Header/TopNav";
+import Header from "./layout/Header/MainHeader";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
+  display: "swap", // Added to improve font loading
 });
 
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
+  display: "swap", // Added to improve font loading
 });
 
 export const metadata: Metadata = {
@@ -23,10 +27,21 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body
+    <html lang="en" suppressHydrationWarning>
+      <body 
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        suppressHydrationWarning
       >
+        <div className="container m-auto p-2">
+          <div className="row">
+            <div className="col-12">
+              <TopNav />
+            </div>
+            <div className="col-12">
+              <Header/>
+            </div>
+          </div>
+        </div>
         {children}
       </body>
     </html>

@@ -35,8 +35,8 @@
 	display: flex;
   }
   .product-card {
-	width: 250px;
-	flex-shrink: 0;
+	min-width: 247px;
+	max-width: 100%;
 	position: relative;
 	box-shadow: 0 2px 10px rgba(26, 25, 25, 0.1);
 	border:1px solid #e5e7eb;
@@ -96,9 +96,12 @@
   .info-icons span{
 	font-size: 13px;
   }
-  .pta{
+  .mobile-label{
 	position: relative;
 	right: 50px;
+  }
+  .cars-label{
+	position: relative;
   }
   .footer-info {
 	position: absolute;
@@ -157,4 +160,3 @@
   .next {
 	right: -17px;
   }
-

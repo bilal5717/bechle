@@ -1,6 +1,6 @@
 'use client';
 import React, { useRef, useState } from 'react';
-import { LuHeart, LuTag, LuMapPin, LuWifi, LuWifiOff } from 'react-icons/lu';
+import { LuHeart, LuSlidersVertical, LuMapPin, LuPlugZap , LuGauge } from 'react-icons/lu'; // Updated icons for bikes
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation } from 'swiper/modules';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -9,83 +9,96 @@ import 'swiper/css';
 import 'swiper/css/navigation';
 import './cardstyles.css';
 
-const Mobiles = () => {
+const Bikes = () => {
   const swiperRef = useRef(null);
   const [showFullCard, setShowFullCard] = useState(false);
 
-  const mobiles = [
+  const bikes = [
     {
       id: 1,
       image: "https://d3fyizz0b46qgr.cloudfront.net/global/homepage/video/spark30series/%E5%9B%BE%E5%B1%82%202.jpg",
-      price: "RS 50,000",
-      title: "Samsung Galaxy S21 Samsung Galaxy S21",
-      status: "Used",
+      price: "RS 500,000",
+      title: "Yamaha YZF-R15 2020",
+      mileage: "10,000 km",
       address: "123 Main St, City, Country",
       posted: "1 day ago",
-      ptaApproved: 'pta',
+      engineCapacity: "150cc",
+      bikeType: 'Sports',
+      transmission: 'Manual',
     },
     {
       id: 2,
       image: "https://d3fyizz0b46qgr.cloudfront.net/global/homepage/video/spark30series/%E5%9B%BE%E5%B1%82%202.jpg",
-      price: "RS 45,000",
-      title: "iPhone 12 iPhone 12iPhone ",
-      status: "New",
+      price: "RS 700,000",
+      title: "Honda CB 300R 2021",
+      mileage: "5,000 km",
       address: "456 Elm St, City, Country",
       posted: "3 days ago",
-      ptaApproved: 'non pta',
+      engineCapacity: "300cc",
+      bikeType: 'Naked',
+      transmission: 'Manual',
     },
     {
       id: 3,
       image: "https://d3fyizz0b46qgr.cloudfront.net/global/homepage/video/spark30series/%E5%9B%BE%E5%B1%82%202.jpg",
-      price: "RS 45,000",
-      title: "iPhone 12 iPhone 12iPhone ",
-      status: "New",
-      address: "456 Elm St, City, Country",
-      posted: "3 days ago",
-      ptaApproved: 'non pta',
+      price: "RS 1,200,000",
+      title: "Kawasaki Ninja 650 2019",
+      mileage: "15,000 km",
+      address: "789 Oak St, City, Country",
+      posted: "5 days ago",
+      engineCapacity: "650cc",
+      bikeType: 'Sports',
+      transmission: 'Manual',
     },
     {
       id: 4,
       image: "https://d3fyizz0b46qgr.cloudfront.net/global/homepage/video/spark30series/%E5%9B%BE%E5%B1%82%202.jpg",
-      price: "RS 45,000",
-      title: "iPhone 12 iPhone 12iPhone ",
-      status: "New",
-      address: "456 Elm St, City, Country",
-      posted: "3 days ago",
-      ptaApproved: 'non pta',
+      price: "RS 900,000",
+      title: "Suzuki GSX-S750 2022",
+      mileage: "8,000 km",
+      address: "321 Pine St, City, Country",
+      posted: "2 days ago",
+      engineCapacity: "750cc",
+      bikeType: 'Street',
+      transmission: 'Manual',
     },
     {
       id: 5,
       image: "https://d3fyizz0b46qgr.cloudfront.net/global/homepage/video/spark30series/%E5%9B%BE%E5%B1%82%202.jpg",
-      price: "RS 45,000",
-      title: "iPhone 12 iPhone 12iPhone ",
-      status: "New",
-      address: "456 Elm St, City, Country",
-      posted: "3 days ago",
-      ptaApproved: 'non pta',
+      price: "RS 1,500,000",
+      title: "Ducati Monster 2021",
+      mileage: "12,000 km",
+      address: "654 Birch St, City, Country",
+      posted: "1 week ago",
+      engineCapacity: "937cc",
+      bikeType: 'Naked',
+      transmission: 'Manual',
     },
     {
       id: 6,
       image: "https://d3fyizz0b46qgr.cloudfront.net/global/homepage/video/spark30series/%E5%9B%BE%E5%B1%82%202.jpg",
-      price: "RS 45,000",
-      title: "iPhone 12 iPhone 12iPhone ",
-      status: "New",
-      address: "456 Elm St, City, Country",
-      posted: "3 days ago",
-      ptaApproved: 'non pta',
+      price: "RS 2,000,000",
+      title: "BMW S1000RR 2020",
+      mileage: "7,000 km",
+      address: "987 Cedar St, City, Country",
+      posted: "2 weeks ago",
+      engineCapacity: "1000cc",
+      bikeType: 'Sports',
+      transmission: 'Manual',
     },
     {
       id: 7,
       image: "https://d3fyizz0b46qgr.cloudfront.net/global/homepage/video/spark30series/%E5%9B%BE%E5%B1%82%202.jpg",
-      price: "RS 45,000",
-      title: "iPhone 12 iPhone 12iPhone ",
-      status: "New",
-      address: "456 Elm St, City, Country",
-      posted: "3 days ago",
-      ptaApproved: 'non pta',
+      price: "RS 2,500,000",
+      title: "Harley-Davidson Street Glide 2021",
+      mileage: "9,000 km",
+      address: "135 Maple St, City, Country",
+      posted: "4 days ago",
+      engineCapacity: "1800cc",
+      bikeType: 'Cruiser',
+      transmission: 'Manual',
     }
   ];
-
 
   const toggleLike = (e) => {
     e.target.classList.toggle('liked');
@@ -100,7 +113,7 @@ const Mobiles = () => {
 
   return (
     <div className="container my-5">
-      <h1>Mobile Phones for Sale</h1>
+      <h1>Bikes for Sale</h1>
       <div className="position-relative">
         <button className="nav-button prev" onClick={() => swiperRef.current?.slidePrev()}>
           <FontAwesomeIcon icon={faChevronLeft} />
@@ -139,31 +152,32 @@ const Mobiles = () => {
             swiperRef.current = swiper;
           }}
         >
-          {mobiles.map((mobile) => (
-            <SwiperSlide key={mobile.id} onClick={handleSlideClick} style={{ width: '240px' }}>
+          {bikes.map((bike) => (
+            <SwiperSlide key={bike.id} onClick={handleSlideClick} style={{ width: '240px' }}>
               <div className="card product-card">
                 <div className="image-container">
-                  <img src={mobile.image} alt={mobile.title} />
+                  <img src={bike.image} alt={bike.title} />
                 </div>
                 <div className="card-body">
                   <div className="price-container">
-                    <h6 className="price">{mobile.price}</h6>
+                    <h6 className="price">{bike.price}</h6>
                     <LuHeart className="heart-icon" onClick={toggleLike} />
                   </div>
-                  <span className='product-title'>{mobile.title}</span>
-                  <div className="product-status">
+                  <span className='product-title'>{bike.title}</span>
+                  <div className="product-status ">
                     <div className="info-icons">
-                      <LuTag /> <span>{mobile.status}</span>
+                      <LuGauge /> <span>{bike.mileage}</span>
                     </div>
+                   
                     <div className="info-icons mobile-label">
-                      {mobile.ptaApproved === 'pta' ? <LuWifi /> : <LuWifiOff />} <span>{mobile.ptaApproved === 'pta' ? 'PTA' : 'Non-PTA'}</span>
+                      <LuPlugZap  /> <span>{bike.transmission}</span> {/* Transmission */}
                     </div>
                   </div>
                   <div className="footer-info">
                     <div className="address">
-                      <LuMapPin /> <span>{mobile.address}</span>
+                      <LuMapPin /> <span>{bike.address}</span>
                     </div>
-                    <p className="time-ago">{mobile.posted}</p>
+                    <p className="time-ago">{bike.posted}</p>
                   </div>
                 </div>
               </div>
@@ -178,4 +192,4 @@ const Mobiles = () => {
   );
 };
 
-export default Mobiles;
+export default Bikes;

@@ -1,6 +1,6 @@
 'use client';
 import React, { useRef, useState } from 'react';
-import { LuHeart, LuTag, LuMapPin, LuWifi, LuWifiOff } from 'react-icons/lu';
+import { LuHeart, LuSlidersVertical , LuMapPin, LuCar, LuFuel, LuGauge } from 'react-icons/lu';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation } from 'swiper/modules';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -9,83 +9,89 @@ import 'swiper/css';
 import 'swiper/css/navigation';
 import './cardstyles.css';
 
-const Mobiles = () => {
+const Cars = () => {
   const swiperRef = useRef(null);
   const [showFullCard, setShowFullCard] = useState(false);
 
-  const mobiles = [
+  const cars = [
     {
       id: 1,
       image: "https://d3fyizz0b46qgr.cloudfront.net/global/homepage/video/spark30series/%E5%9B%BE%E5%B1%82%202.jpg",
-      price: "RS 50,000",
-      title: "Samsung Galaxy S21 Samsung Galaxy S21",
-      status: "Used",
+      price: "RS 2,500,000",
+      title: "Toyota Corolla 2020",
+      mileage: "50,000 km",
       address: "123 Main St, City, Country",
       posted: "1 day ago",
-      ptaApproved: 'pta',
+      fuelType: 'Petrol',
+      automatic: 'Manual',
     },
     {
       id: 2,
       image: "https://d3fyizz0b46qgr.cloudfront.net/global/homepage/video/spark30series/%E5%9B%BE%E5%B1%82%202.jpg",
-      price: "RS 45,000",
-      title: "iPhone 12 iPhone 12iPhone ",
-      status: "New",
+      price: "RS 3,000,000",
+      title: "Honda Civic 2021",
+      mileage: "10,000 km",
       address: "456 Elm St, City, Country",
       posted: "3 days ago",
-      ptaApproved: 'non pta',
+      fuelType: 'Hybrid',
+      automatic: 'Auto',
     },
     {
       id: 3,
       image: "https://d3fyizz0b46qgr.cloudfront.net/global/homepage/video/spark30series/%E5%9B%BE%E5%B1%82%202.jpg",
-      price: "RS 45,000",
-      title: "iPhone 12 iPhone 12iPhone ",
-      status: "New",
-      address: "456 Elm St, City, Country",
-      posted: "3 days ago",
-      ptaApproved: 'non pta',
+      price: "RS 1,800,000",
+      title: "Suzuki Cultus 2019",
+      mileage: "70,000 km",
+      address: "789 Oak St, City, Country",
+      posted: "5 days ago",
+      fuelType: 'Petrol',
+      automatic: 'Manual',
     },
     {
       id: 4,
       image: "https://d3fyizz0b46qgr.cloudfront.net/global/homepage/video/spark30series/%E5%9B%BE%E5%B1%82%202.jpg",
-      price: "RS 45,000",
-      title: "iPhone 12 iPhone 12iPhone ",
-      status: "New",
-      address: "456 Elm St, City, Country",
-      posted: "3 days ago",
-      ptaApproved: 'non pta',
+      price: "RS 4,500,000",
+      title: "Toyota Prius 2022",
+      mileage: "5,000 km",
+      address: "321 Pine St, City, Country",
+      posted: "2 days ago",
+      fuelType: 'Hybrid',
+      automatic: 'Manual',
     },
     {
       id: 5,
       image: "https://d3fyizz0b46qgr.cloudfront.net/global/homepage/video/spark30series/%E5%9B%BE%E5%B1%82%202.jpg",
-      price: "RS 45,000",
-      title: "iPhone 12 iPhone 12iPhone ",
-      status: "New",
-      address: "456 Elm St, City, Country",
-      posted: "3 days ago",
-      ptaApproved: 'non pta',
+      price: "RS 6,000,000",
+      title: "Audi A4 2021",
+      mileage: "30,000 km",
+      address: "654 Birch St, City, Country",
+      posted: "1 week ago",
+      fuelType: 'Diesel',
+      automatic: 'Manual',
     },
     {
       id: 6,
       image: "https://d3fyizz0b46qgr.cloudfront.net/global/homepage/video/spark30series/%E5%9B%BE%E5%B1%82%202.jpg",
-      price: "RS 45,000",
-      title: "iPhone 12 iPhone 12iPhone ",
-      status: "New",
-      address: "456 Elm St, City, Country",
-      posted: "3 days ago",
-      ptaApproved: 'non pta',
+      price: "RS 7,500,000",
+      title: "BMW X5 2020",
+      mileage: "40,000 km",
+      address: "987 Cedar St, City, Country",
+      posted: "2 weeks ago",
+      fuelType: 'Petrol',
+      automatic: 'Manual',
     },
     {
       id: 7,
       image: "https://d3fyizz0b46qgr.cloudfront.net/global/homepage/video/spark30series/%E5%9B%BE%E5%B1%82%202.jpg",
-      price: "RS 45,000",
-      title: "iPhone 12 iPhone 12iPhone ",
-      status: "New",
-      address: "456 Elm St, City, Country",
-      posted: "3 days ago",
-      ptaApproved: 'non pta',
+      price: "RS 8,000,000",
+      title: "Mercedes-Benz C-Class 2021",
+      mileage: "15,000 km",
+      address: "135 Maple St, City, Country",
+      posted: "4 days ago",
+      fuelType: 'Diesel',
+      automatic: 'Manual',
     }
   ];
-
 
   const toggleLike = (e) => {
     e.target.classList.toggle('liked');
@@ -100,7 +106,7 @@ const Mobiles = () => {
 
   return (
     <div className="container my-5">
-      <h1>Mobile Phones for Sale</h1>
+      <h1>Cars for Sale</h1>
       <div className="position-relative">
         <button className="nav-button prev" onClick={() => swiperRef.current?.slidePrev()}>
           <FontAwesomeIcon icon={faChevronLeft} />
@@ -139,31 +145,34 @@ const Mobiles = () => {
             swiperRef.current = swiper;
           }}
         >
-          {mobiles.map((mobile) => (
-            <SwiperSlide key={mobile.id} onClick={handleSlideClick} style={{ width: '240px' }}>
+          {cars.map((car) => (
+            <SwiperSlide key={car.id} onClick={handleSlideClick} style={{ width: '240px' }}>
               <div className="card product-card">
                 <div className="image-container">
-                  <img src={mobile.image} alt={mobile.title} />
+                  <img src={car.image} alt={car.title} />
                 </div>
                 <div className="card-body">
                   <div className="price-container">
-                    <h6 className="price">{mobile.price}</h6>
+                    <h6 className="price">{car.price}</h6>
                     <LuHeart className="heart-icon" onClick={toggleLike} />
                   </div>
-                  <span className='product-title'>{mobile.title}</span>
+                  <span className='product-title'>{car.title}</span>
                   <div className="product-status">
                     <div className="info-icons">
-                      <LuTag /> <span>{mobile.status}</span>
+                      <LuGauge /> <span>{car.mileage}</span>
                     </div>
-                    <div className="info-icons mobile-label">
-                      {mobile.ptaApproved === 'pta' ? <LuWifi /> : <LuWifiOff />} <span>{mobile.ptaApproved === 'pta' ? 'PTA' : 'Non-PTA'}</span>
+                    <div className="info-icons cars-label">
+                      <LuFuel /> <span>{car.fuelType}</span>
+                    </div>
+                    <div className="info-icons">
+                      <LuSlidersVertical  />  <span>{car.automatic}</span>
                     </div>
                   </div>
                   <div className="footer-info">
                     <div className="address">
-                      <LuMapPin /> <span>{mobile.address}</span>
+                      <LuMapPin /> <span>{car.address}</span>
                     </div>
-                    <p className="time-ago">{mobile.posted}</p>
+                    <p className="time-ago">{car.posted}</p>
                   </div>
                 </div>
               </div>
@@ -178,4 +187,4 @@ const Mobiles = () => {
   );
 };
 
-export default Mobiles;
+export default Cars;

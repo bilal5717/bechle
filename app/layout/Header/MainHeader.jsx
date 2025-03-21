@@ -78,27 +78,30 @@ const Header = () => {
       </div>
 
       {/* Center: Search Bar */}
-<div className="flex items-center border  px-4  w-1/2">
+<div className="flex items-center border    w-1/2">
   <input
     type="text"
     placeholder="Search..."
     className="ml-2 bg-transparent outline-none w-full"
   />
   {/* Icon container */}
-  <div className="p-2 bg-gray-200 rounded-lg flex items-center justify-center">
+  <div className="p-2 search-btn  flex items-center justify-start">
     <Search size={16} className="text-gray-600" />
   </div>
 </div>
 
       {/* Right Side: Icons and Login/Signup Button */}
-      <div className="flex items-center space-x-6 w-1/5 justify-end mx-3">
+      <div className="flex items-center space-x-6 w-1/6 justify-center mx-3">
         <MessageCircle size={24} className="cursor-pointer" />
         <Bell size={24} className="cursor-pointer" />
         <ShoppingBag size={24} className="cursor-pointer" />
-        <button className="flex items-center space-x-1">
+        <button className="flex items-center space-x-1 login-show-hide">
           <User size={18} />
           <span>Login/Signup</span>
         </button>
+        <div className="circle-avatar">
+
+        </div>
       </div>
     </header>
   );

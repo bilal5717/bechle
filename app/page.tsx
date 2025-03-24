@@ -3,7 +3,7 @@ import Carousel from './componente/HeaderBanner/HeaderBanner';
 import carBanner from './assets/BannerImages/bannerimagecar.png';
 import textBanner from './assets/BannerImages/textBanner.png';
 import CategoriesBox from './componente/CategoriesBox/CategoryBox';
-import Mobiles from './componente/ProductCards/Mobiles';
+import Mobiles from '@/app/componente/ProductCards/Mobiles';
 import Cars from './componente/ProductCards/Cars';
 import Bikes from './componente/ProductCards/Bikes';
 import Houses from './componente/ProductCards/Houses';

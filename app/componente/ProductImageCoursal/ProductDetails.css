@@ -1,0 +1,139 @@
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+
+.modal-close-btn {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: #fff;
+    color: #333;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 50%;
+    font-size: 20px;
+    cursor: pointer;
+    z-index: 10000;
+}
+
+.modal-content img,
+.modal-content video {
+    width: 80%;
+    max-height: 80%;
+    object-fit: contain;
+    cursor: pointer;
+    border-radius: 9px;
+}
+
+/* Top-right icons */
+.top-right-icons {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 10;
+    display: flex;
+    gap: 10px;
+}
+.fav-icon{
+    background-color: #333;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.fav-icon svg {
+    cursor: pointer;
+    font-size: 20px;
+    color: #fff;
+    fill: none;
+
+}
+
+.fav-icon svg.liked {
+    color: #e0245e;
+    fill: #e0245e;
+}
+
+/* Carousel arrow buttons */
+.carousel-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: #eaeaea;
+    color: black;
+    border: none;
+    padding: 15px;
+    border-radius: 50%;
+    font-weight: bold;
+    font-size: 24px;
+    cursor: pointer;
+    z-index: 2;
+}
+
+.carousel-arrow.left {
+    left: 10px;
+}
+
+.carousel-arrow.right {
+    right: 10px;
+}
+
+/* Video thumbnail styling */
+.video-thumbnail {
+    cursor: pointer;
+    width: 100%;
+    position: relative;
+}
+
+.video-play-btn {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: #ffffff;
+    border: none;
+    padding: 15px 30px;
+    border-radius: 50%;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+/* Image zoom styling */
+.carousel .thumbs-wrapper{
+    padding: 0;
+    margin: 20px 0;
+}
+.modal-content {
+    cursor: zoom-in;
+}
+
+.carousel .thumb img{
+height: 100%;
+border-radius: 9px;
+}
+.carousel .thumb{
+    height: 95px !important;
+    width: 100px !important;
+    padding: 0;
+}
+.thumbs {
+    padding: 0;
+}
+.carousel .thumb.selected, .carousel .thumb:hover {
+    border: 3px solid #333;
+    border-radius: 13px;
+}
+.carousel img {
+    border-radius: 9px;
+}

@@ -1,5 +1,8 @@
 'use client';
 import React, { useRef, useState } from 'react';
+import { useRouter } from "next/navigation";
+
+import Link from 'next/link';
 import { LuHeart, LuTag, LuMapPin, LuWifi, LuWifiOff } from 'react-icons/lu';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation } from 'swiper/modules';
@@ -14,88 +17,15 @@ const Mobiles = () => {
   const [showFullCard, setShowFullCard] = useState(false);
 
   const mobiles = [
-    {
-      id: 1,
-      image: "https://d3fyizz0b46qgr.cloudfront.net/global/homepage/video/spark30series/%E5%9B%BE%E5%B1%82%202.jpg",
-      price: "RS 50,000",
-      title: "Samsung Galaxy S21 Samsung Galaxy S21",
-      status: "Used",
-      address: "123 Main St, City, Country",
-      posted: "1 day ago",
-      ptaApproved: 'pta',
-    },
-    {
-      id: 2,
-      image: "https://d3fyizz0b46qgr.cloudfront.net/global/homepage/video/spark30series/%E5%9B%BE%E5%B1%82%202.jpg",
-      price: "RS 45,000",
-      title: "iPhone 12 iPhone 12iPhone ",
-      status: "New",
-      address: "456 Elm St, City, Country",
-      posted: "3 days ago",
-      ptaApproved: 'non pta',
-    },
-    {
-      id: 3,
-      image: "https://d3fyizz0b46qgr.cloudfront.net/global/homepage/video/spark30series/%E5%9B%BE%E5%B1%82%202.jpg",
-      price: "RS 45,000",
-      title: "iPhone 12 iPhone 12iPhone ",
-      status: "New",
-      address: "456 Elm St, City, Country",
-      posted: "3 days ago",
-      ptaApproved: 'non pta',
-    },
-    {
-      id: 4,
-      image: "https://d3fyizz0b46qgr.cloudfront.net/global/homepage/video/spark30series/%E5%9B%BE%E5%B1%82%202.jpg",
-      price: "RS 45,000",
-      title: "iPhone 12 iPhone 12iPhone ",
-      status: "New",
-      address: "456 Elm St, City, Country",
-      posted: "3 days ago",
-      ptaApproved: 'non pta',
-    },
-    {
-      id: 5,
-      image: "https://d3fyizz0b46qgr.cloudfront.net/global/homepage/video/spark30series/%E5%9B%BE%E5%B1%82%202.jpg",
-      price: "RS 45,000",
-      title: "iPhone 12 iPhone 12iPhone ",
-      status: "New",
-      address: "456 Elm St, City, Country",
-      posted: "3 days ago",
-      ptaApproved: 'non pta',
-    },
-    {
-      id: 6,
-      image: "https://d3fyizz0b46qgr.cloudfront.net/global/homepage/video/spark30series/%E5%9B%BE%E5%B1%82%202.jpg",
-      price: "RS 45,000",
-      title: "iPhone 12 iPhone 12iPhone ",
-      status: "New",
-      address: "456 Elm St, City, Country",
-      posted: "3 days ago",
-      ptaApproved: 'non pta',
-    },
-    {
-      id: 7,
-      image: "https://d3fyizz0b46qgr.cloudfront.net/global/homepage/video/spark30series/%E5%9B%BE%E5%B1%82%202.jpg",
-      price: "RS 45,000",
-      title: "iPhone 12 iPhone 12iPhone ",
-      status: "New",
-      address: "456 Elm St, City, Country",
-      posted: "3 days ago",
-      ptaApproved: 'non pta',
-    }
+    { id: 1, image: "https://d3fyizz0b46qgr.cloudfront.net/global/homepage/video/spark30series/%E5%9B%BE%E5%B1%82%202.jpg", price: "RS 50,000", title: "Samsung Galaxy S21", status: "Used", address: "123 Main St, City, Country", posted: "1 day ago", ptaApproved: 'pta' },
+    { id: 2, image: "https://d3fyizz0b46qgr.cloudfront.net/global/homepage/video/spark30series/%E5%9B%BE%E5%B1%82%202.jpg", price: "RS 45,000", title: "iPhone 12", status: "New", address: "456 Elm St, City, Country", posted: "3 days ago", ptaApproved: 'non pta' }
   ];
 
+  const toggleLike = (e) => e.stopPropagation() || e.target.classList.toggle('liked');
+  const router = useRouter();
 
-  const toggleLike = (e) => {
-    e.target.classList.toggle('liked');
-  };
-
-  const handleSlideClick = () => {
-    setShowFullCard(!showFullCard);
-    if (swiperRef.current) {
-      swiperRef.current.slideNext(); // Move to the next slide on click
-    }
+  const handleCardClick = (id) => {
+    router.push(`/postDetails/${id}`);
   };
 
   return (
@@ -107,41 +37,21 @@ const Mobiles = () => {
         </button>
         <Swiper
           modules={[Navigation]}
-          spaceBetween={10} // Consistent gap between cards
-          slidesPerView="auto" // Use "auto" to allow custom slide widths
-          navigation={{
-            prevEl: '.prev',
-            nextEl: '.next',
-          }}
+          spaceBetween={10}
+          slidesPerView="auto"
+          navigation={{ prevEl: '.prev', nextEl: '.next' }}
           breakpoints={{
-            // When window width is >= 320px
-            320: {
-              slidesPerView: 1,
-            },
-            // When window width is >= 480px
-            480: {
-              slidesPerView: 2,
-            },
-            // When window width is >= 768px
-            768: {
-              slidesPerView: 3,
-            },
-            // When window width is >= 992px
-            992: {
-              slidesPerView: 4,
-            },
-            // When window width is >= 1200px
-            1200: {
-              slidesPerView: showFullCard ? 5 : 4.5, // Show 4.5 cards on large screens
-            },
+            320: { slidesPerView: 1 },
+            480: { slidesPerView: 2 },
+            768: { slidesPerView: 3 },
+            992: { slidesPerView: 4 },
+            1200: { slidesPerView: showFullCard ? 5 : 4.5 }
           }}
-          onSwiper={(swiper) => {
-            swiperRef.current = swiper;
-          }}
+          onSwiper={(swiper) => (swiperRef.current = swiper)}
         >
           {mobiles.map((mobile) => (
-            <SwiperSlide key={mobile.id} onClick={handleSlideClick} style={{ width: '240px' }}>
-              <div className="card product-card">
+            <SwiperSlide key={mobile.id} style={{ width: '240px' }}>
+              <div className="card product-card" onClick={() => handleCardClick(mobile.id)}>
                 <div className="image-container">
                   <img src={mobile.image} alt={mobile.title} />
                 </div>

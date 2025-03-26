@@ -1,7 +1,5 @@
 'use client';
 import React, { useRef, useState } from 'react';
-import { useRouter } from "next/navigation";
-
 import Link from 'next/link';
 import { LuHeart, LuTag, LuMapPin, LuWifi, LuWifiOff } from 'react-icons/lu';
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -22,14 +20,9 @@ const Mobiles = () => {
   ];
 
   const toggleLike = (e) => e.stopPropagation() || e.target.classList.toggle('liked');
-  const router = useRouter();
-
-  const handleCardClick = (id) => {
-    router.push(`/postDetails/${id}`);
-  };
 
   return (
-    <div className="container my-5">
+    <div className="container-fluid my-3">
       <h1>Mobile Phones for Sale</h1>
       <div className="position-relative">
         <button className="nav-button prev" onClick={() => swiperRef.current?.slidePrev()}>
@@ -51,32 +44,34 @@ const Mobiles = () => {
         >
           {mobiles.map((mobile) => (
             <SwiperSlide key={mobile.id} style={{ width: '240px' }}>
-              <div className="card product-card" onClick={() => handleCardClick(mobile.id)}>
-                <div className="image-container">
-                  <img src={mobile.image} alt={mobile.title} />
+              <Link href={`/postDetails/${mobile.id}`} passHref>
+                <div className="card product-card">
+                  <div className="image-container">
+                    <img src={mobile.image} alt={mobile.title} />
+                  </div>
+                  <div className="card-body">
+                    <div className="price-container">
+                      <h6 className="price">{mobile.price}</h6>
+                      <LuHeart className="heart-icon" onClick={toggleLike} />
+                    </div>
+                    <span className='product-title'>{mobile.title}</span>
+                    <div className="product-status">
+                      <div className="info-icons">
+                        <LuTag /> <span>{mobile.status}</span>
+                      </div>
+                      <div className="info-icons mobile-label">
+                        {mobile.ptaApproved === 'pta' ? <LuWifi /> : <LuWifiOff />} <span>{mobile.ptaApproved === 'pta' ? 'PTA' : 'Non-PTA'}</span>
+                      </div>
+                    </div>
+                    <div className="footer-info">
+                      <div className="address">
+                        <LuMapPin /> <span>{mobile.address}</span>
+                      </div>
+                      <p className="time-ago">{mobile.posted}</p>
+                    </div>
+                  </div>
                 </div>
-                <div className="card-body">
-                  <div className="price-container">
-                    <h6 className="price">{mobile.price}</h6>
-                    <LuHeart className="heart-icon" onClick={toggleLike} />
-                  </div>
-                  <span className='product-title'>{mobile.title}</span>
-                  <div className="product-status">
-                    <div className="info-icons">
-                      <LuTag /> <span>{mobile.status}</span>
-                    </div>
-                    <div className="info-icons mobile-label">
-                      {mobile.ptaApproved === 'pta' ? <LuWifi /> : <LuWifiOff />} <span>{mobile.ptaApproved === 'pta' ? 'PTA' : 'Non-PTA'}</span>
-                    </div>
-                  </div>
-                  <div className="footer-info">
-                    <div className="address">
-                      <LuMapPin /> <span>{mobile.address}</span>
-                    </div>
-                    <p className="time-ago">{mobile.posted}</p>
-                  </div>
-                </div>
-              </div>
+              </Link>
             </SwiperSlide>
           ))}
         </Swiper>

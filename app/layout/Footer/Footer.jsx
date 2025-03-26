@@ -4,26 +4,26 @@ import { LuYoutube, LuFacebook , LuInstagram, LuLinkedin } from 'react-icons/lu'
 const Footer = () => {
     return (
         <footer className=" py-4  w-full">
-            <div className="container mx-auto px-5">
+            <div className="container ">
                 <div className="grid grid-cols-1 md:grid-cols-4 ">
                     {/* Most Trending Search */}
                     <div className="footer-section">
                         <h5 className="font-bold mb-2">Most Trending Search</h5>
-                        <ul className="space-y-1">
-                            <li><a href="#" className="footer-links hover:text-gray-500 cursor-pointer">Mobile</a></li>
-                            <li><a href="#" className="footer-links hover:text-gray-500 cursor-pointer">Bike</a></li>
-                            <li><a href="#" className="footer-links hover:text-gray-500 cursor-pointer">Laptop</a></li>
-                            <li><a href="#" className="footer-links hover:text-gray-500 cursor-pointer">Pet</a></li>
+                        <ul className="">
+                            <li><a href="#" className="footer-links cursor-pointer">Mobile</a></li>
+                            <li><a href="#" className="footer-links  cursor-pointer">Bike</a></li>
+                            <li><a href="#" className="footer-links cursor-pointer">Laptop</a></li>
+                            <li><a href="#" className="footer-links  cursor-pointer">Pet</a></li>
                         </ul>
                     </div>
 
                     {/* About Us */}
                     <div className="footer-section">
                         <h5 className="font-bold mb-2">About Us</h5>
-                        <ul className="space-y-1">
-                            <li><a href="#" className="footer-links hover:text-gray-500 cursor-pointer">Company Name</a></li>
-                            <li><a href="#" className="footer-links hover:text-gray-500 cursor-pointer">Blog</a></li>
-                            <li><a href="#" className="footer-links hover:text-gray-500 cursor-pointer">Contact Us</a></li>
+                        <ul className="p-0">
+                            <li><a href="#" className="footer-links cursor-pointer">Company Name</a></li>
+                            <li><a href="#" className="footer-links cursor-pointer">Blog</a></li>
+                            <li><a href="#" className="footer-links cursor-pointer">Contact Us</a></li>
                         </ul>
                     </div>
 
@@ -31,13 +31,13 @@ const Footer = () => {
                     {/* Beecho */}
                     <div className="footer-section">
                         <h5 className="font-bold mb-2">Beecho</h5>
-                        <ul className="space-y-1">
-                            <li><a href="#" className="footer-links hover:text-gray-500 cursor-pointer">Help</a></li>
-                            <li><a href="#" className="footer-links hover:text-gray-500 cursor-pointer">Terms of Use</a></li>
-                            <li><a href="#" className="footer-links hover:text-gray-500 cursor-pointer">Privacy Policy</a></li>
-                            <li><a href="#" className="footer-links hover:text-gray-500 cursor-pointer">FAQ</a></li>
-                            <li><a href="#" className="footer-links hover:text-gray-500 cursor-pointer">Verified Seller</a></li>
-                            <li><a href="#" className="footer-links hover:text-gray-500 cursor-pointer">Short Customer Feedback</a></li>
+                        <ul className="p-0">
+                            <li><a href="#" className="footer-links  cursor-pointer">Help</a></li>
+                            <li><a href="#" className="footer-links cursor-pointer">Terms of Use</a></li>
+                            <li><a href="#" className="footer-links cursor-pointer">Privacy Policy</a></li>
+                            <li><a href="#" className="footer-links  cursor-pointer">FAQ</a></li>
+                            <li><a href="#" className="footer-links cursor-pointer">Verified Seller</a></li>
+                            <li><a href="#" className="footer-links  cursor-pointer">Short Customer Feedback</a></li>
                         </ul>
                     </div>
 

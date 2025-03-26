@@ -112,7 +112,7 @@ const Bikes = () => {
   };
 
   return (
-    <div className="container my-5">
+    <div className="container-fluid my-3">
       <h1>Bikes for Sale</h1>
       <div className="position-relative">
         <button className="nav-button prev" onClick={() => swiperRef.current?.slidePrev()}>

@@ -1,0 +1,248 @@
+.right-product-wrapper{
+    width: 30%;
+}
+.seller-card {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 20px;
+    width: 100%;
+    background: #fff;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.seller-text {
+    color: #777;
+    font-size: 14px;
+    margin-bottom: 5px;
+}
+.seller-header {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+.seller-avatar img {
+    width: 55px;
+    height: 55px;
+    border-radius: 5px;
+}
+.seller-details {
+    display: flex;
+    flex-direction: column;
+}
+.seller-name {
+    color: red;
+    font-weight: bold;
+    font-size: 16px;
+}
+.seller-rating {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 10px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 10px;
+    letter-spacing: 0.02em;
+
+   
+    color: #2e3238;
+    background: #f5f5f5;
+    padding: 4px 8px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    margin-left: auto;
+}
+.seller-body {
+    font-size: 16px;
+    color: #333;
+    margin: 5px 0;
+}
+.seller-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 10px;
+}
+.phone-btn {
+    background: red;
+    color: white;
+    border: none;
+    padding: 12px;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+   
+}
+.chat-btn {
+    background: white;
+    color: black;
+    border: 1px solid #ddd;
+    padding: 12px;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+   
+}
+/* buttons */
+.sellup-button{
+    background-color: #000;
+   color: white;
+}
+.whatsapp-button{
+    background-color: #89d2a4;
+    color: white;
+}
+.whatsapp-button:hover{
+    background-color: #059F01;
+}
+.whatsapp-button img{
+    width: 20px;
+    height: 20px;
+}
+.chatt-button{
+    background-color: #ce635f;
+    color: white;
+}
+.chatt-button:hover{
+    background-color: #a92824;
+}
+
+.phone-button{
+    background-color: #f8f8f8;
+    border: 1px solid darkgray;
+    color: black;
+}
+.phone-button:hover{
+    background-color: white;
+}
+.phone-button img{
+    width: 20px;
+    height: 20px;
+}
+
+.seller-verification {
+    font-family: proxima-nova, ProximaNova, noto, var(--my-gess), GESS, GE-SS, sans-serif;
+    font-weight: 700;
+    font-size: 12px;
+    color: #059F01;
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    height: 22px;
+    white-space: nowrap;
+    background-color: #f1f8f1;
+   border-radius: 3px;
+   border: 1px solid #e1e1e1;
+   line-height: 16px;
+   
+    padding:0 2px;
+    
+}
+.seller-verification img {
+    margin-right: 2px;
+    width: 18px;
+}
+.seller-verification span {
+    font-size: 12px;
+    display: flex;
+    margin-top: 2px;
+    color: #059F01;
+    align-items: center;
+}
+.verified-container {
+display: flex;
+background-image: url(../../assets//sellerProfileicons//verified-banner-background.svg);
+align-items: center;
+justify-content: space-between;
+background-repeat: no-repeat;
+background-size: cover;
+padding: 15px;
+border-radius: 10px;
+box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+width: 300px;
+position: relative;
+}
+
+.verified-content {
+display: flex;
+flex-direction: column;
+gap: 5px;
+}
+
+.verified-title {
+font-size: 14px;
+font-weight: normal;
+color: #000;
+margin: 0 0 2px 0; /* Added margin-bottom for spacing */
+}
+
+.verified-description {
+font-size: 12px;
+color: #333;
+margin: 0;
+line-height: 1.7; /* Adjusted for better spacing */
+}
+
+.verified-button-container {
+margin-top: 5px;
+}
+
+.verified-button {
+background-color: #23262a;
+color: white;
+display: flex;
+flex-direction: row;
+align-items: center;
+gap: 16px;
+padding: 6px 12px;
+border: none; 
+border-radius: 6px;
+background-size: cover;
+background-repeat: no-repeat;
+font-size: 14px;
+font-weight: normal;
+cursor: pointer;
+transition: background-color 0.3s;  
+}
+
+.verified-button:hover {
+background-color: #333;
+}
+
+/* Image Positioning - Adjust this to change image location */
+.verified-image-container {
+
+position: absolute;
+bottom: 50px; /* Change this to move image up/down */
+right: 15px;  /* Change this to move image left/right */
+}
+
+.verified-image {
+width: 57px;
+height: 65px;
+
+
+}
+.view-profile-link {
+color: blue;
+text-decoration: underline;
+font-size: 12px;
+display: flex;
+align-items: center;
+gap: 2px; 
+}
+
+.view-profile-link img {
+width: 14px; 
+height: auto;
+filter: invert(24%) sepia(95%) saturate(2392%) hue-rotate(205deg) brightness(92%) contrast(102%); /* Blue color ke liye */
+}

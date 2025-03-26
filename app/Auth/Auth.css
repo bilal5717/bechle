@@ -1,0 +1,119 @@
+:root {
+  --light-gray: #f5f5f5;
+  --dark-gray:#e6e6e6;
+  --foreground: #171717;
+  --btn-color:#a9252b;
+  --text-color:#000000DE;
+
+}
+.modal-content{
+  width: 93%;
+ 
+}
+.daraz-auth-modal .modal-content {
+    border-radius: 8px;
+    border: none;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+  
+  .daraz-auth-modal .modal-header {
+    padding: 20px 20px 0;
+  }
+  
+  .daraz-auth-modal .modal-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--btn-color);
+  }
+  
+  .daraz-auth-modal .nav-tabs {
+    border-bottom: none;
+    margin-top: 15px;
+  }
+  
+  .daraz-auth-modal .nav-link {
+    border: none;
+    color: #666;
+    font-weight: 500;
+    padding: 10px 20px;
+    position: relative;
+  }
+  
+  .daraz-auth-modal .nav-link.active {
+    color: var(--btn-color);
+    background: transparent;
+  }
+  
+  .daraz-auth-modal .nav-link.active:after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 50%;
+    height: 2px;
+    background-color: var(--btn-color);
+  }
+  
+  .daraz-auth-modal .daraz-input {
+    padding: 12px 15px;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+  }
+  
+  .daraz-auth-modal .daraz-input:focus {
+    border-color: var(--btn-color);
+    box-shadow: 0 0 0 0.2rem rgba(245, 114, 36, 0.25);
+  }
+  
+  .daraz-auth-modal .daraz-primary-btn {
+    background-color: var(--btn-color);
+    border: none;
+    padding: 12px;
+    font-weight: 500;
+    border-radius: 4px;
+  }
+  
+  .daraz-auth-modal .daraz-primary-btn:hover {
+    background-color: var(--btn-color);
+  }
+  .social-btn{
+    width: 150px;
+  }
+  .social-btn:hover{
+    color: black;
+    background-color: var(--light-gray);
+  }
+  .daraz-auth-modal .social-btn {
+    padding: 8px 15px;
+    border-radius: 4px;
+    font-size: 0.9rem;
+  }
+  
+  .daraz-auth-modal .divider-text {
+    position: relative;
+    color: #999;
+    margin-bottom: 15px;
+  }
+  
+  .daraz-auth-modal .divider-text:before,
+  .daraz-auth-modal .divider-text:after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    width: 30%;
+    height: 1px;
+    background: #ddd;
+  }
+  
+  .daraz-auth-modal .divider-text:before {
+    left: 0;
+  }
+  
+  .daraz-auth-modal .divider-text:after {
+    right: 0;
+  }
+  
+  .cursor-pointer {
+    cursor: pointer;
+  }

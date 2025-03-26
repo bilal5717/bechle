@@ -19,7 +19,7 @@ const Carousel = ({ images }) => {
 
   return (
     <>
-      <div className="container flex">
+      <div className="container-fluid flex">
         <div className="header-banner flex-grow relative w-full h-full rounded-lg">
           {images.map((img, index) => (
             <div
@@ -37,7 +37,7 @@ const Carousel = ({ images }) => {
               <button
                 key={index}
                 onClick={() => setCurrent(index)}
-                className={`w-3 h-3 rounded-full ${index === current ? 'bg-blue-500' : 'bg-gray-300'}`}
+                className={`w-3 gap-2 h-3 rounded-full ${index === current ? 'bg-blue-500' : 'bg-gray-300'}`}
                 aria-label={`Slide ${index + 1}`}
               />
             ))}

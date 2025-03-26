@@ -110,9 +110,10 @@
 }
 
 /* Image zoom styling */
-.carousel .thumbs-wrapper{
+
+.thumbs-wrapper{
     padding: 0;
-    margin: 20px 0;
+    margin: 0px !important;
 }
 .modal-content {
     cursor: zoom-in;
@@ -129,6 +130,8 @@ border-radius: 9px;
 }
 .thumbs {
     padding: 0;
+    margin-top: 10px;
+    margin-bottom: 0;
 }
 .carousel .thumb.selected, .carousel .thumb:hover {
     border: 3px solid #333;

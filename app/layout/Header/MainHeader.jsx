@@ -9,9 +9,13 @@ import {
   ChevronDown,
   MapPin, // Location icon
 } from 'lucide-react';
+import AuthPopup from '../../Auth/AuthContainer';
 const Header = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [selectedProvince, setSelectedProvince] = useState(null);
+  const [isOpen, setIsOpen] = useState(false);
+
+  const toggleDropdown = () => setIsOpen(!isOpen);
 
   const provinces = {
     'Punjab': ['Lahore', 'Faisalabad', 'Rawalpindi', 'Multan'],
@@ -31,7 +35,7 @@ const Header = () => {
   };
 
   return (
-    <header className="flex items-center justify-center p-4">
+    <header className="flex items-center justify-center py-2">
       {/* Left Side: Dropdown */}
       <div className="flex items-center space-x-2 w-1/6 border mx-3 relative align-self-end">
         <button 
@@ -95,14 +99,26 @@ const Header = () => {
         <MessageCircle size={24} className="cursor-pointer" />
         <Bell size={24} className="cursor-pointer" />
         <ShoppingBag size={24} className="cursor-pointer" />
-        <button className="flex items-center space-x-1 login-show-hide">
-          <User size={18} />
-          <span>Login/Signup</span>
-        </button>
-        <div className="circle-avatar">
-
-        </div>
+       
+        <AuthPopup />
+      {/*   <div className="relative inline-block hide">
+      <div className="circle-avatar" onClick={toggleDropdown}>
+        <img
+          src="https://png.pngtree.com/png-vector/20230831/ourmid/pngtree-man-avatar-image-for-profile-png-image_9197911.png"
+          alt="default-avatar"
+        />
+        <ChevronDown />
       </div>
+      {isOpen && (
+        <div className="dropdown-menu">
+          <a href="/login">Login</a>
+          <a href="/signup">Sign Up</a>
+        </div>
+      )}
+    </div> */}
+        <hr />
+      </div>
+      
     </header>
   );
 };

@@ -5,6 +5,8 @@ import TopNav from "./layout/Header/TopNav";
 import Header from "./layout/Header/MainHeader";
 import Footer from './layout/Footer/Footer';
 import CopyFooter from './layout/Footer/copyright';
+
+import 'bootstrap/dist/css/bootstrap.min.css';
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -29,17 +31,24 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
+      <head>
+        <link
+          rel="stylesheet"
+          href="https://fonts.cdnfonts.com/css/geomanist"
+        />
+      </head>
       <body 
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className="antialiased"
+        style={{ fontFamily: "'Geomanist', sans-serif" }}
         suppressHydrationWarning
       >
-        <div className="container m-auto p-2">
+        <div className="container-fluid m-auto p-2">
           <div className="row">
             <div className="col-12">
               <TopNav />
             </div>
             <div className="col-12">
-              <Header/>
+              <Header />
             </div>
           </div>
         </div>

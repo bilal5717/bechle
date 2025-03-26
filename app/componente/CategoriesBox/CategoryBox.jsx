@@ -22,12 +22,12 @@ const categories = [
 
 const CategoriesBox = () => {
     return (
-        <div className="container mt-5">
+        <div className="container-fluid mt-5">
             <h1 className="main-heading">Sell Up - Pakistan's Largest Marketplace for New & Used Items</h1>
             <p className="text-muted cat-para">Buy & Sell in Pakistan – Cars, Bikes, Property, Mobile Phones, Electronics, Jobs & More on Pakistan's #1 Marketplace.</p>
             <div className="d-flex justify-content-center flex-wrap  cat-cards">
                 {categories.map((category) => (
-                    <div key={category.id} className="card text-center  cat-card" style={{ width: '8rem', cursor: 'pointer' }}>
+                    <div key={category.id} className="card text-center border-none  cat-card" style={{ width: '8rem', cursor: 'pointer' }}>
                         <div className="card-body cat-card-body">
                             <img 
                                 src={category.image.src} 

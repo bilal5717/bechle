@@ -25,8 +25,27 @@ const AuthPopup = () => {
   const [showSignupPassword, setShowSignupPassword] = useState(false);
   const [showSignupConfirmPassword, setShowSignupConfirmPassword] = useState(false);
   
-  const [countdown, setCountdown] = useState(0);
-  const [isCounting, setIsCounting] = useState(false);
+  // OTP verification states
+  const [showOtpVerification, setShowOtpVerification] = useState(false);
+  const [otp, setOtp] = useState(["", "", "", ""]);
+  const [showResend, setShowResend] = useState(false);
+  const [secondsLeft, setSecondsLeft] = useState(0);
+
+  // Timer effect
+  useEffect(() => {
+    let timer;
+    if (secondsLeft > 0) {
+      timer = setTimeout(() => setSecondsLeft(secondsLeft - 1), 1000);
+    } else if (secondsLeft === 0 && !showResend) {
+      setShowResend(true);
+    }
+    return () => clearTimeout(timer);
+  }, [secondsLeft, showResend]);
+
+  const startTimer = () => {
+    setShowResend(false);
+    setSecondsLeft(40);
+  };
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
@@ -71,19 +90,39 @@ const AuthPopup = () => {
   };
  
   const handleGetCode = () => {
-    setIsCounting(true);
-    setCountdown(40);
+    startTimer();
   };
 
-  useEffect(() => {
-    let timer;
-    if (isCounting && countdown > 0) {
-      timer = setTimeout(() => setCountdown(countdown - 1), 1000);
-    } else if (countdown === 0) {
-      setIsCounting(false);
+  const handleVerifyOtp = () => {
+    const fullOtp = otp.join("");
+    console.log('Verifying OTP:', fullOtp);
+    // On successful verification, you might want to proceed with signup
+  };
+
+  const handleSendOtp = (method) => {
+    setShowOtpVerification(true);
+    startTimer();
+    console.log(`Sending OTP via ${method} to ${signupPhone}`);
+  };
+
+  const handleOtpChange = (index, value) => {
+    if (/^\d*$/.test(value) && value.length <= 1) {
+      const newOtp = [...otp];
+      newOtp[index] = value;
+      setOtp(newOtp);
+      
+      // Auto focus to next input
+      if (value && index < 3) {
+        document.getElementById(`otp-input-${index + 1}`).focus();
+      }
     }
-    return () => clearTimeout(timer);
-  }, [countdown, isCounting]);
+  };
+
+  const handleOtpKeyDown = (index, e) => {
+    if (e.key === "Backspace" && !otp[index] && index > 0) {
+      document.getElementById(`otp-input-${index - 1}`).focus();
+    }
+  };
 
   return (
     <>
@@ -91,7 +130,7 @@ const AuthPopup = () => {
         <strong className='text-decoration-underline'>Login</strong>
       </button>
 
-      <Modal show={show} onHide={handleClose} centered className="daraz-auth-modal"  backdrop="static">
+      <Modal show={show} onHide={handleClose} centered className="daraz-auth-modal" backdrop="static">
         <Modal.Header closeButton className="modal-header border-0 pb-0">
           <div className="mb-0">
             <Nav variant="pills" className="justify-content-center">
@@ -167,7 +206,7 @@ const AuthPopup = () => {
                         onClick={toggleLoginPasswordVisibility}
                         style={{ cursor: "pointer" }}
                       >
-                        {showLoginPassword ? <FaEyeSlash /> : <FaEye />}
+                        {showLoginPassword ? <FaEye /> : <FaEyeSlash />}
                       </InputGroup.Text>
                     </InputGroup>
                   </Form.Group>
@@ -247,9 +286,9 @@ const AuthPopup = () => {
                               border: 'none',
                             }}
                             onClick={handleGetCode}
-                            disabled={isCounting}
+                            disabled={secondsLeft > 0}
                           >
-                            {isCounting ? `Resend in ${countdown}s` : 'Get Code'}
+                            {secondsLeft > 0 ? `Resend in ${secondsLeft}s` : 'Get Code'}
                           </Button>
                         </InputGroup>
                       </Form.Group>
@@ -268,7 +307,7 @@ const AuthPopup = () => {
                             onClick={toggleSignupPasswordVisibility}
                             style={{ cursor: "pointer" }}
                           >
-                            {showSignupPassword ? <FaEyeSlash /> : <FaEye />}
+                            {showSignupPassword ? <FaEye /> :<FaEyeSlash /> }
                           </InputGroup.Text>
                         </InputGroup>
                       </Form.Group>
@@ -287,7 +326,7 @@ const AuthPopup = () => {
                             onClick={toggleSignupConfirmPasswordVisibility}
                             style={{ cursor: "pointer" }}
                           >
-                            {showSignupConfirmPassword ? <FaEyeSlash /> : <FaEye />}
+                            {showSignupConfirmPassword ? <FaEye />  :<FaEyeSlash /> }
                           </InputGroup.Text>
                         </InputGroup>
                       </Form.Group>
@@ -305,34 +344,100 @@ const AuthPopup = () => {
                   {/* Phone Section */}
                   {loginMethod === "phone" && (
                     <>
-                      <Form.Group className="mb-3 d-flex align-items-center">
-                        <div className="input-group">
-                          <span className="input-group-text" style={{ padding: '0.375rem 0.75rem' }}>
-                            <img 
-                              src="https://flagcdn.com/w20/pk.png" 
-                              alt="Pakistan" 
-                              style={{ width: '24px', marginRight: '8px' }} 
-                            />
-                            <span className="mx-0 mt-1">+92</span>
-                          </span>
-                          <Form.Control
-                            type="tel"
-                            placeholder="Phone Number"
-                            className="form-control daraz-input"
-                            value={signupPhone}
-                            onChange={(e) => setSignupPhone(e.target.value)}
-                            style={{ paddingLeft: '15px', paddingTop: '15px' }}
-                          />
+                      {!showOtpVerification ? (
+                        <>
+                          <Form.Group className="mb-3 d-flex align-items-center">
+                            <div className="input-group">
+                              <span className="input-group-text" style={{ padding: '0.375rem 0.75rem' }}>
+                                <img 
+                                  src="https://flagcdn.com/w20/pk.png" 
+                                  alt="Pakistan" 
+                                  style={{ width: '24px', marginRight: '8px' }} 
+                                />
+                                <span className="mx-0 mt-1">+92</span>
+                              </span>
+                              <Form.Control
+                                type="tel"
+                                placeholder="Phone Number"
+                                className="form-control daraz-input"
+                                value={signupPhone}
+                                onChange={(e) => setSignupPhone(e.target.value)}
+                                style={{ paddingLeft: '15px', paddingTop: '15px' }}
+                              />
+                            </div>
+                          </Form.Group>
+                          
+                          <Button 
+                            className="w-100 mb-3 btn-success"
+                            onClick={() => handleSendOtp("WhatsApp")}
+                          >
+                            Send OTP Code Via WhatsApp
+                          </Button>
+                          
+                          <Button 
+                            className="w-100 mb-3 bg-white text-dark border-dark"
+                            onClick={() => handleSendOtp("SMS")}
+                          >
+                            Send OTP Code Via Message
+                          </Button>
+                        </>
+                      ) : (
+                        <>
+                        <div className="d-flex justify-content-between mb-4">
+                          {[0, 1, 2, 3].map((index) => (
+                            <>
+                              <Form.Control
+                                key={index}
+                                id={`otp-input-${index}`}
+                                type="text"
+                                className="form-control daraz-input text-center mx-2"
+                                style={{
+                                  width: '70px',
+                                  height: '70px',
+                                  fontSize: '1.5rem',
+                                  padding: '0'
+                                }}
+                                value={otp[index]}
+                                onChange={(e) => handleOtpChange(index, e.target.value)}
+                                onKeyDown={(e) => handleOtpKeyDown(index, e)}
+                                maxLength={1}
+                              />
+                              {index < 3 && <span className="d-flex align-items-center">-</span>}
+                            </>
+                          ))}
                         </div>
-                      </Form.Group>
-                      
-                      <Button className="w-100 mb-3 btn-success">
-                        Send OTP Code Via WhatsApp
-                      </Button>
-                      
-                      <Button className="w-100 mb-3 bg-white text-dark border-dark">
-                        Send OTP Code Via Message
-                      </Button>
+
+                        <Button 
+                          variant="danger" 
+                          className="w-100 mb-3 daraz-primary-btn"
+                          onClick={handleVerifyOtp}
+                          disabled={otp.some(digit => digit === "")}
+                        >
+                          Verify OTP
+                        </Button>
+
+                        <div className="text-center mb-3">
+                          <p className="small">
+                            Didn't receive code?{' '}
+                            {showResend ? (
+                              <span 
+                                className="text-danger cursor-pointer" 
+                                onClick={() => {
+                                  setShowOtpVerification(false);
+                                  startTimer();
+                                }}
+                              >
+                                Resend
+                              </span>
+                            ) : (
+                              <span className="text-muted">
+                                Resend code in {secondsLeft} seconds
+                              </span>
+                            )}
+                          </p>
+                        </div>
+                        </>
+                      )}
                     </>
                   )}
 
@@ -346,7 +451,8 @@ const AuthPopup = () => {
                   </div>
                 </Form>
 
-                <div className="text-center mt-4">
+                <div className="hide">
+                <div className="text-center mt-4 ">
                   <p className="divider-text small">or Signup with</p>
                   <div className="d-flex justify-content-center gap-3">
                     <Button variant="outline-secondary" className="social-btn d-flex align-items-center justify-content-center">
@@ -364,6 +470,7 @@ const AuthPopup = () => {
                       <span className="mx-0 mt-1">Google</span>
                     </Button>
                   </div>
+                </div>
                 </div>
               </Tab.Pane>
             </Tab.Content>

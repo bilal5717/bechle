@@ -3,7 +3,7 @@
 import { useParams } from "next/navigation";
 import { LuCopyCheck,LuShieldCheck,LuArchiveRestore  } from "react-icons/lu";
 import Link from 'next/link';
-import ProductImageCorusal from "../../componente/ProductImageCoursal/ProductImgSlider";
+import ProductImageCorusal from "../../components/ProductImageCoursal/ProductImgSlider";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import SellerBusinessProfileCard from "../sellerProfilecards/VerifiedBusinessSeller";
 const mobiles = [

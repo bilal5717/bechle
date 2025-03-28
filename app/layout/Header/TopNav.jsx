@@ -6,6 +6,7 @@ import Image from "next/image";
 import Link from "next/link";
 import logo from '../../assets/logo.png';
 
+
 const TopNav = () => {
   const [hoveredMenu, setHoveredMenu] = useState(null);
   const [isClient, setIsClient] = useState(false);
@@ -256,7 +257,7 @@ const TopNav = () => {
 
       {/* Links on the right */}
       <RightLinks>
-      <Link href="/new-post" passHref>
+      <Link href={`/post`}>
     <EditButton>
       <LuSquarePen size={16} /> {/* Edit icon */}
       <span>Add New Post</span>

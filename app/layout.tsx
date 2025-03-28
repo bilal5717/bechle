@@ -1,3 +1,4 @@
+// app/layout.jsx
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
@@ -5,18 +6,18 @@ import TopNav from "./layout/Header/TopNav";
 import Header from "./layout/Header/MainHeader";
 import Footer from './layout/Footer/Footer';
 import CopyFooter from './layout/Footer/copyright';
-
 import 'bootstrap/dist/css/bootstrap.min.css';
+
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
-  display: "swap", // Added to improve font loading
+  display: "swap",
 });
 
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
-  display: "swap", // Added to improve font loading
+  display: "swap",
 });
 
 export const metadata: Metadata = {
@@ -32,29 +33,19 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
-        <link
-          rel="stylesheet"
-          href="https://fonts.cdnfonts.com/css/geomanist"
-        />
+        <link rel="stylesheet" href="https://fonts.cdnfonts.com/css/geomanist" />
       </head>
       <body 
         className="antialiased"
         style={{ fontFamily: "'Geomanist', sans-serif" }}
         suppressHydrationWarning
       >
-        <div className="container-fluid m-auto p-2">
+        <div className="container-fluid m-auto">
           <div className="row">
-            <div className="col-12">
-              <TopNav />
-            </div>
-            <div className="col-12">
-              <Header />
-            </div>
+           
           </div>
         </div>
         {children}
-        <Footer />
-        <CopyFooter />
       </body>
     </html>
   );

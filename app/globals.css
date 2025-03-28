@@ -225,3 +225,13 @@ footer{
 .product-details-wrapper{
   background-color: #f7f7f7;
 }
+
+/* Post Add form styling main */
+
+.video-upload-heading{
+  font-size: 16px;
+  font-weight: bold;
+}
+.video-upload-text{
+  font-size: 15px;
+}

@@ -10,7 +10,6 @@ const mobiles = [
   { id: 1, image: "https://d3fyizz0b46qgr.cloudfront.net/global/homepage/video/spark30series/%E5%9B%BE%E5%B1%82%202.jpg", price: "RS 50,000", title: "Samsung Galaxy S21", status: "Used", address: "123 Main St, City, Country", posted: "1 day ago", ptaApproved: 'pta' },
   { id: 2, image: "https://d3fyizz0b46qgr.cloudfront.net/global/homepage/video/spark30series/%E5%9B%BE%E5%B1%82%202.jpg", price: "RS 45,000", title: "iPhone 12", status: "New", address: "456 Elm St, City, Country", posted: "3 days ago", ptaApproved: 'non pta' }
 ];
-
 export default function PostPage() {
   const { id } = useParams();
   const mobile = mobiles.find((m) => m.id === parseInt(id));
@@ -138,6 +137,30 @@ export default function PostPage() {
           {/* Right side bar seller types and profiles */}
           <div className="col-3  my-2 mx-4  p-0 right-product-wrapper">
             <SellerBusinessProfileCard />
+            <div className="card my-2" style={{ maxWidth: '540px' }}>
+  <div className="card-body d-flex align-items-start p-2">
+    {/* Left Side with Image, Title & Status */}
+    <div className=" d-flex me-3 text-center">
+      <img
+        src="https://static.vecteezy.com/system/resources/previews/004/477/337/non_2x/face-young-man-in-frame-circular-avatar-character-icon-free-vector.jpg"
+        alt="Vendor"
+        className="rounded-circle mb-2"
+        width="80"
+        height="80"
+      />
+      <div className="d-flex flex-column align-items-center justify-content-center">
+      <h1 className="card-title mb-1">Vendor Name</h1>
+      <button className="btn btn-sm btn-success">Vendor</button>
+      </div>
+    </div>
+  </div>
+  <button className="btn btn-warning my-2 mx-auto " style={{ width: '90%' }}>
+      Visit Vendor
+    </button>
+ 
+</div>
+
+            
           </div>
   </div>
       </div>

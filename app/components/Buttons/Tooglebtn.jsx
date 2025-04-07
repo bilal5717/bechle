@@ -4,7 +4,7 @@ import styled from 'styled-components';
 const Switch = () => {
   return (
     <StyledWrapper>
-      <div className="toggle-button-cover">
+      <div className="toggle-button-cover ">
         <div id="button-3" className="button r">
           <input className="checkbox" type="checkbox" />
           <div className="knobs" />
@@ -18,9 +18,7 @@ const Switch = () => {
 const StyledWrapper = styled.div`
   .toggle-button-cover {
     display: table-cell;
-    position: relative;
-    width: 200px;
-    height: 140px;
+    float:right;
     box-sizing: border-box;
   }
 
@@ -30,8 +28,14 @@ const StyledWrapper = styled.div`
     background-color: #fff;
     box-shadow: 0 10px 20px -8px #c5d6d6;
     border-radius: 4px;
+    top: 22px;
+    position: relative;
   }
-
+.gfgtBU .toggle-button-cover {
+    
+    position: relative;
+    top: 22px;
+}
   .button-cover:before {
     counter-increment: button-counter;
     content: counter(button-counter);
@@ -57,8 +61,8 @@ const StyledWrapper = styled.div`
   .button {
     position: relative;
     top: 50%;
-    width: 74px;
-    height: 36px;
+    width: 60px;
+    height: 26px;
     margin: -20px auto 0 auto;
     overflow: hidden;
   }
@@ -93,7 +97,7 @@ const StyledWrapper = styled.div`
   #button-3 .knobs:before {
    content: "YES";
     position: absolute;
-    top: 6px;
+    top: 0px;
     left: 4px;
     width: 25px;
     height: 25px;
@@ -119,7 +123,7 @@ const StyledWrapper = styled.div`
 
   #button-3 .checkbox:checked + .knobs:before {
     content: "NO";
-    left: 42px;
+    left: 33px;
     background-color: #f44336;
   }
 

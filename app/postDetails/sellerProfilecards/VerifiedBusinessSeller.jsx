@@ -3,6 +3,7 @@ import './SellersProfile.css';
 import { FaWhatsapp } from 'react-icons/fa';
 import { MessageCircle ,Phone,CreditCard } from 'lucide-react';
 import { LuChevronRight } from 'react-icons/lu';
+import Link from 'next/link';
 const SellerProfileCard = () => {
   return (
     <div className="seller-card">
@@ -26,7 +27,7 @@ const SellerProfileCard = () => {
             </div>
         </div>
         <p className="seller-body">
-            <a href="your-profile-link" className="view-profile-link">View Profile  <LuChevronRight  /></a>
+            <Link href={`/Profile/${1}`}  className="view-profile-link" passHref>View Profile  <LuChevronRight  /></Link>
           </p>
           <div className="seller-buttons">
             <div className="d-flex align-items-center justify-content-between gap-3 p-0">

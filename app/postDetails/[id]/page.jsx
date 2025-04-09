@@ -6,6 +6,10 @@ import Link from 'next/link';
 import ProductImageCorusal from "../../components/ProductImageCoursal/ProductImgSlider";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import SellerBusinessProfileCard from "../sellerProfilecards/VerifiedBusinessSeller";
+import TopNav from "@/app/layout/Header/TopNav";
+import Header from "@/app/layout/Header/MainHeader";
+import Footer from "@/app/layout/Footer/Footer";
+import CopyFooter from "@/app/layout/Footer/copyright";
 const mobiles = [
   { id: 1, image: "https://d3fyizz0b46qgr.cloudfront.net/global/homepage/video/spark30series/%E5%9B%BE%E5%B1%82%202.jpg", price: "RS 50,000", title: "Samsung Galaxy S21", status: "Used", address: "123 Main St, City, Country", posted: "1 day ago", ptaApproved: 'pta' },
   { id: 2, image: "https://d3fyizz0b46qgr.cloudfront.net/global/homepage/video/spark30series/%E5%9B%BE%E5%B1%82%202.jpg", price: "RS 45,000", title: "iPhone 12", status: "New", address: "456 Elm St, City, Country", posted: "3 days ago", ptaApproved: 'non pta' }
@@ -16,6 +20,8 @@ export default function PostPage() {
 
   return (
     <div className="container-fluid body-wrapper my-0 product-details-wrapper">
+      <TopNav />
+      <Header />
       <hr />
       <div className="container product-details-inner-wrapper">
       <div className="row ">
@@ -164,6 +170,8 @@ export default function PostPage() {
           </div>
   </div>
       </div>
+      <Footer />
+<CopyFooter />
     </div>
   );
 }

@@ -235,3 +235,8 @@ footer{
 .video-upload-text{
   font-size: 15px;
 }
+
+/* User profile section store  */
+.profile-info{
+  border-left:7px solid #a9252b !important;
+}

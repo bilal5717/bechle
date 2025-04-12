@@ -6,13 +6,17 @@ import React from 'react';
 /* import JobPostingForm from './postCategories/Jobs'; */
 /* import ServicePostingForm from '@/app/post/postCategories/Services'; *//* 
 import BusinessIndustrialForm from '@/app/post/postCategories/BusinessIndustrialAgriculture'; */
-import BikesPosting from './postCategories/Bikes';
+/* import BikesPosting from './postCategories/Bikes'; */
+/* import ElectronicsPosting from './postCategories/Electronics&Home'; */
+/* import PropertyForRent from './postCategories/Property_Rent'; */
+/* import PropertySalePosting from './postCategories/Property_Sale'; */
+import VehiclesPosting from './postCategories/Vehicles';
 function PostCreation() {
   return (
     <div className="">
       {/* <CreateAnimalPost /> */}
      {/*  <FasionNBeaty /> */}
-     <BikesPosting />
+     <VehiclesPosting />
     </div>
   );
 }

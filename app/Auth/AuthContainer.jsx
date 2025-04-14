@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Modal, Button, Tab, Nav, Form, InputGroup } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
-import "./Auth.css";
+import "./Auth.module.css";
 import { FaEye, FaEyeSlash, FaFacebook } from "react-icons/fa";
 import Image from "next/image";
 import Google from '@/public/images/socialicons/search.png';

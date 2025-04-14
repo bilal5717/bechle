@@ -1,11 +1,4 @@
-:root {
-  --light-gray: #f5f5f5;
-  --dark-gray:#e6e6e6;
-  --foreground: #171717;
-  --btn-color:#a9252b;
-  --text-color:#000000DE;
 
-}
 .modal-content{
   width: 93%;
  
@@ -23,7 +16,7 @@
   .daraz-auth-modal .modal-title {
     font-size: 1.5rem;
     font-weight: 600;
-    color: var(--btn-color);
+    color: #a9252b;
   }
   
   .daraz-auth-modal .nav-tabs {
@@ -40,7 +33,7 @@
   }
   
   .daraz-auth-modal .nav-link.active {
-    color: var(--btn-color);
+    color: #a9252b;
     background: transparent;
   }
   
@@ -52,7 +45,7 @@
     transform: translateX(-50%);
     width: 50%;
     height: 2px;
-    background-color: var(--btn-color);
+    background-color: #a9252b;
   }
   
   .daraz-auth-modal .daraz-input {
@@ -62,12 +55,12 @@
   }
   
   .daraz-auth-modal .daraz-input:focus {
-    border-color: var(--btn-color);
+    border-color: #a9252b;
     box-shadow: 0 0 0 0.2rem rgba(245, 114, 36, 0.25);
   }
   
   .daraz-auth-modal .daraz-primary-btn {
-    background-color: var(--btn-color);
+    background-color: #a9252b;
     border: none;
     padding: 12px;
     font-weight: 500;
@@ -75,14 +68,14 @@
   }
   
   .daraz-auth-modal .daraz-primary-btn:hover {
-    background-color: var(--btn-color);
+    background-color: #a9252b;
   }
   .social-btn{
     width: 150px;
   }
   .social-btn:hover{
     color: black;
-    background-color: var(--light-gray);
+    background-color: #f5f5f5;
   }
   .daraz-auth-modal .social-btn {
     padding: 8px 15px;

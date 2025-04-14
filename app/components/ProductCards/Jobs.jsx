@@ -7,7 +7,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import 'swiper/css';
 import 'swiper/css/navigation';
-import './cardstyles.css';
+import './cardstyles.module.css';
 
 const Jobs = () => {
   const swiperRef = useRef(null);

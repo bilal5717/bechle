@@ -3,7 +3,6 @@ import TopNav from "../layout/Header/TopNav";
 import Header from "../layout/Header/MainHeader";
 import Footer from '../layout/Footer/Footer';
 import CopyFooter from '../layout/Footer/copyright';
-
 export default function MainLayout({
   children,
 }: {

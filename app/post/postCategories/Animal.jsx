@@ -2,18 +2,18 @@
 import React, { useState } from 'react';
 import { FiEdit, FiX, FiChevronDown, FiCheck, FiPlus, FiSearch } from 'react-icons/fi';
 import Switch from '@/app/components/Buttons/Tooglebtn';
-const CreateAnimalPost = () => {
+const CreateAnimalPost = ({selectedSubCat,selectedType}) => {
   // State Management
+  console.log(selectedType);
   const [showCategoryModal, setShowCategoryModal] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState('Select Category');
-  const [selectedAnimalType, setSelectedAnimalType] = useState('Select Type');
-  const [selectedSubAnimalType, setSelectedSubAnimalType] = useState('Select Sub-Type');
+  const [selectedAnimalType, setSelectedAnimalType] = useState(selectedSubCat);
+  const [selectedSubAnimalType, setSelectedSubAnimalType] = useState(selectedType);
   const [breed, setBreed] = useState('');
   const [gender, setGender] = useState('');
+  const [condition, setCondition] = useState('');
   const [age, setAge] = useState('');
   const [isVaccinated, setIsVaccinated] = useState(false);
-  const [showAnimalTypeDropdown, setShowAnimalTypeDropdown] = useState(false);
-  const [animalTypeSearchTerm, setAnimalTypeSearchTerm] = useState('');
   const [location, setLocation] = useState('');
   const [name, setName] = useState('');
   const [postDetails, setPostDetails] = useState({
@@ -54,25 +54,11 @@ const CreateAnimalPost = () => {
     { id: 6, name: 'Services', icon: '🔧' },
   ];
 
-  const animalCategories = [
-    {
-      name: 'Animals',
-      options: ['Pets', 'Livestock', 'Aquarium', 'Birds', 'Others']
-    },
-    {
-      name: 'Animal Supplies',
-      options: ['Food & Accessories', 'Medicine', 'Others']
-    }
-  ];
+
 
   const genderOptions = ['Male', 'Female'];
 
-  // Derived Values
-  const filteredAnimalTypes = animalCategories.flatMap(category => 
-    category.options.filter(option => 
-      option.toLowerCase().includes(animalTypeSearchTerm.toLowerCase())
-    )
-  );
+  const conditionOptions = ['New', 'Used'];
 
   const showAnimalDetailsFields = selectedAnimalType !== 'Others' && 
                                 selectedAnimalType !== 'Select Type' && 
@@ -155,49 +141,7 @@ const CreateAnimalPost = () => {
     </div>
   );
 
-  const renderAnimalTypeDropdown = () => (
-    <div className="position-absolute top-100 start-0 end-0 mx-5 bg-white border rounded shadow-sm z-1 mt-1">
-      <div className="max-h-200 overflow-auto">
-        {animalTypeSearchTerm ? (
-          filteredAnimalTypes.map((type, index) => (
-            <div
-              key={index}
-              className={`p-2 cursor-pointer ${selectedAnimalType === type ? 'bg-light' : ''}`}
-              onClick={() => {
-                setSelectedAnimalType(type);
-                setShowAnimalTypeDropdown(false);
-                setAnimalTypeSearchTerm('');
-              }}
-            >
-              {type}
-            </div>
-          ))
-        ) : (
-          animalCategories.map((category, catIndex) => (
-            <div key={catIndex}>
-              <div className="p-2 fw-bold bg-light text-center">
-                {category.name}
-              </div>
-              {category.options.map((option, optIndex) => (
-                <div
-                  key={optIndex}
-                  className={`p-2 ps-4 cursor-pointer ${selectedAnimalType === option ? 'bg-light' : ''}`}
-                  onClick={() => {
-                    setSelectedAnimalType(option);
-                    setShowAnimalTypeDropdown(false);
-                    setAnimalTypeSearchTerm('');
-                  }}
-                >
-                  {option}
-                </div>
-              ))}
-            </div>
-          ))
-        )}
-      </div>
-    </div>
-  );
-
+ 
   return (
     <div className="container mt-4 mb-5">
       <div className="row justify-content-center">
@@ -229,54 +173,15 @@ const CreateAnimalPost = () => {
                 </button>
               </div>
             </div>
-<hr />
+
             <div className="row align-items-around mb-3  p-3 ">
               <form onSubmit={handleSubmit}>
-                {/* Type Selection Field */}
-                <div className="mb-3 d-flex align-items-center">
-                  <div className="row w-100">
-                    <div className="col-4">
-                      <label className="form-label"><b>Select Type</b></label>
-                    </div>
-                    <div className="col-8 position-relative p-0">
-                      <div 
-                        className="form-control  d-flex align-items-center cursor-pointer"
-                        onClick={() => setShowAnimalTypeDropdown(!showAnimalTypeDropdown)}
-                      >
-                        <FiSearch className="me-2" />
-                        <span>{selectedAnimalType}</span>
-                      </div>
-                      {showAnimalTypeDropdown && renderAnimalTypeDropdown()}
-                    </div>
-                  </div>
-                </div>
+                
 
                 {/* Animal Details Fields */}
                 {showAnimalDetailsFields && (
                   <>
-                    {/* Sub-Type Selection */}
-                    <div className="mb-3 d-flex align-items-center">
-                      <div className="row w-100">
-                        <div className="col-4 ">
-                          <label className="form-label"><b>What Type Of {selectedAnimalType}</b></label>
-                        </div>
-                        <div className="col-8 position-relative  p-0">
-                          <select
-                            className="form-select "
-                            value={selectedSubAnimalType}
-                            onChange={(e) => setSelectedSubAnimalType(e.target.value)}
-                          >
-                            <option disabled>Select Sub-Type</option>
-                            {animalSubTypes[selectedAnimalType].map((subType, index) => (
-                              <option key={index} value={subType}>
-                                {subType}
-                              </option>
-                            ))}
-                          </select>
-                        </div>
-                      </div>
-                    </div>
-                    <hr />
+                    
 <div className="">
   {/* Breed Field */}
 {selectedSubAnimalType !== 'Select Sub-Type' && (
@@ -329,6 +234,8 @@ const CreateAnimalPost = () => {
     </div>
   </div>
 )}
+
+
                     {/* Age Field */}
                     {selectedSubAnimalType !== 'Select Sub-Type' && (
                     <div className="mb-3 d-flex align-items-center z-index-0">
@@ -389,6 +296,39 @@ const CreateAnimalPost = () => {
 </div>
                   </>
                 )}
+                
+               {/* Gender Field - Updated to Tab Buttons */}
+               {selectedSubAnimalType === 'Food&Accessories' &&(
+  <div className="mb-3 d-flex align-items-center">
+    <div className="row w-100">
+      <div className="col-4">
+        <label className="form-label"><b>Gender</b></label>
+      </div>
+      <div className="col-8 p-0 m-0">
+        <div className="d-flex gap-3"> {/* Increased gap between buttons */}
+          {genderOptions.map(option => (
+            <div key={option} className="flex-grow-1"> {/* Each button in its own container */}
+              <button
+                type="button"
+                className={`btn w-100 ${gender === option 
+                  ? 'btn-warning text-white' 
+                  : 'btn-outline-secondary'}`}
+                onClick={() => setGender(option)}
+                style={{
+                  padding: '0.375rem 0.75rem',
+                  fontSize: '0.875rem'
+                }}
+              >
+                {option}
+              </button>
+            </div>
+          ))}
+        </div>
+        <small className="text-muted d-block text-end mt-1">Select the animal's gender</small>
+      </div>
+    </div>
+  </div>
+)}
                 <hr />
 <div className="">
   {/* Title Field */}

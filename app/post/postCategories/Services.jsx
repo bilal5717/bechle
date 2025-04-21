@@ -3,11 +3,11 @@ import React, { useState, useRef } from 'react';
 import { FiEdit, FiX, FiChevronDown, FiCheck, FiPlus, FiSearch, FiClock, FiDollarSign, FiMapPin, FiUser, FiPhone } from 'react-icons/fi';
 import Switch from '@/app/components/Buttons/Tooglebtn';
 
-const ServicePostingForm = () => {
+const ServicePostingForm = ({selectedSubCat,selectedType}) => {
   // State Management
   const [showCategoryModal, setShowCategoryModal] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState('Home Services');
-  const [serviceType, setServiceType] = useState('Select Service Type');
+  const [serviceType, setServiceType] = useState(selectedSubCat);
   const [businessType, setBusinessType] = useState('individual');
   const [businessName, setBusinessName] = useState('');
   const [price, setPrice] = useState('');
@@ -24,7 +24,7 @@ const ServicePostingForm = () => {
     description: '',
     contactName: '',
   });
-  const [specialField, setSpecialField] = useState('');
+  const [specialField, setSpecialField] = useState(selectedType);
   const [specialTypeField, setspecialTypeField] = useState('');
   const [images, setImages] = useState([]);
   const [videoFile, setVideoFile] = useState(null);
@@ -272,48 +272,7 @@ const ServicePostingForm = () => {
 
             <div className="row align-items-around mb-3 p-3">
               <form onSubmit={handleSubmit}>
-                {/* Service Type Selection */}
-                <div className="mb-3 d-flex align-items-center">
-                  <div className="row w-100">
-                    <div className="col-4">
-                      <label className="form-label"><b>Service SubCategory</b></label>
-                    </div>
-                    <div className="col-8 position-relative p-0">
-                      <div 
-                        className="form-control d-flex align-items-center cursor-pointer"
-                        onClick={() => setShowServiceTypeDropdown(!showServiceTypeDropdown)}
-                      >
-                        <span>{serviceType}</span>
-                        <FiChevronDown className="ms-auto" />
-                      </div>
-                      {showServiceTypeDropdown && renderServiceTypeDropdown()}
-                    </div>
-                  </div>
-                </div>
-
-                {/* Special Field Dropdown (Conditional) */}
-                {hasSpecialField && (
-                  <div className="mb-3 d-flex align-items-center">
-                    <div className="row w-100">
-                      <div className="col-4">
-                        <label className="form-label"><b>What Kind of {serviceType}</b></label>
-                      </div>
-                      <div className="col-8 p-0">
-                        <select
-                          className="form-select"
-                          value={specialField}
-                          onChange={(e) => setSpecialField(e.target.value)}
-                          required
-                        >
-                          <option value="" disabled>Select {serviceType} Type</option>
-                          {specialFields[serviceType].map((field, index) => (
-                            <option key={index} value={field}>{field}</option>
-                          ))}
-                        </select>
-                      </div>
-                    </div>
-                  </div>
-                )}
+              
                 {/* Special Field Dropdown (Conditional) */}
                 {hasSpecialTypeField && (
                   <div className="mb-3 d-flex align-items-center">
@@ -446,7 +405,7 @@ const ServicePostingForm = () => {
                         </div>
                         
                       )}
-                <hr />
+               
 
                 {/* Service Title */}
                 <div className="mb-3 d-flex align-items-center">

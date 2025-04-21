@@ -4,7 +4,7 @@ import React, { useState, useRef } from 'react';
 import { FiEdit, FiX, FiChevronDown, FiCheck, FiPlus, FiSearch, FiCalendar } from 'react-icons/fi';
 import Switch from '@/app/components/Buttons/Tooglebtn';
 
-const ElectronicsPosting = () => {
+const ElectronicsPosting = ({selectedSubCat,selectedType}) => {
   // Data Constants
   const categories = [
     { id: 1, name: 'Vehicles', icon: '🚗' },
@@ -17,35 +17,14 @@ const ElectronicsPosting = () => {
     { id: 8, name: 'Business/Industrial/Agriculture', icon: '🏭' },
   ];
 
-  const subCategories = [
-    'Computer & Accessories', 'Games & Entertainment', 'Cameras & Accessories',
-    'Videos & Audios', 'AC & Coolers', 'Fans', 'Heaters And Gysers',
-    'Washing Machines & dryers', 'Irons & Steamers', 'Sewing Machines',
-    'Generators,UPS And Power Solutions', 'Refrigerator & Freezers',
-    'water dispensers', 'Microwave & Ovens', 'Kitchen Appliances', 'Other Electronics'
-  ];
-
   const optionsData = {
-    whattypeOptions: {
-      'Computer & Accessories': ['Desktops', 'Workstations', 'Gaming Pcs', 'Laptops', 'Computer & Laptop Accessories', 'Computer components', 'Servers', 'Softwares', 'Networking', 'Printers & photocopier', 'Inks & Toners'],
-      'Games & Entertainment': ['Gaming console', 'Video Games', 'Controllers', 'Gaming Accessories', 'Other'],
-      'Cameras & Accessories': ['Digital Camera', 'CCTV Camera', 'Drones', 'Binowlars', 'Video Cameras', 'Camera lenses', 'Flash Guns', 'Bags & cases', 'Tripods & Stands', 'Camera Batteries', 'Professional Microphone', 'Video Lights', 'Gimbles & Stablizers', 'Other Cameras Accessories'],
-      'Videos & Audios': ['Radios', 'Microphone', 'Home Theater system', 'Amplifiers', 'Sound Bars', 'Speaker', 'Audio interface', 'Digital Recorders', 'Audio Mixer', 'Walkie Talkie', 'CD DVD Player', 'Turntable & Accessories', 'Cassette Player & Recorders', 'Mp3 Player', 'Car Audio Video', 'Other Video-audios'],
-      'AC & Coolers': ['Air Conditions', 'Air Coolers', 'AC & Cooler Accessories', 'Other'],
-      'Heaters And Gysers': ['Heaters', 'Geysers', 'Heating Rods', 'Other'],
-      'Microwave & Ovens': ['Ovens', 'Microwaves'],
-      'Generators,UPS And Power Solutions': ['Generators', 'UPS', 'Solar Panels', 'Solar Inverters', 'Solar Accessories', 'Batteries', 'Other'],
-      'Refrigerator & Freezers': ['Refigerators', 'Freezers' ,'Mini'],
-      'Irons & Steamers': ['Irons', 'steamers' ],
-      'Kitchen Appliances': ['juicers','Food Factory','Stover','Blenders','Air Fryers','Choppers','Grilss','Water pori frers','Mixers','Electric Kettles','Toasters','Cookers','Hot Plates','Coffee & TeaMachines','Hobs','Dinner Seats','Sandwich Makers','Vegetable slicers','Hoods','Meat Grinders','Dishwashers','Roti Maker','Sinks','Food Steamers','Other Kitchen appliances'],
-      'Other Electronics': ['Other']
-    },
     brands: {
       'Laptops': ['Dell', 'HP', 'Lenovo', 'Apple', 'Asus', 'Acer', 'Other'],
       'Digital Camera': ['Other'],
       'CCTV Camera': ['Other'],
       'Drones': ['Other'],
       'Fans': ['Other'],
+      'Washer': ['Other'],
       'Heaters': ['Other'],
       'Geysers': ['Other'],
       'Solar Panels': ['Other'],
@@ -59,7 +38,7 @@ const ElectronicsPosting = () => {
     },
     subTypeOptions: {
       'Laptops': ['Dell', 'Other'],
-      'Networking': ['Other'],
+      'Networking': ['Modems','Other'],
       'Video Games': ['Other'],
       'Controllers': ['Other'],
       'Air Conditions': ['Other'],
@@ -91,9 +70,9 @@ const ElectronicsPosting = () => {
   const [state, setState] = useState({
     showCategoryModal: false,
     selectedCategory: 'Electronics',
-    subCategory: 'Select Sub Category',
+    subCategory: selectedSubCat,
     showSubCategoryDropdown: false,
-    type: '',
+    type: selectedType,
     functionType: '',
     brand: '',
     subType: '',
@@ -101,6 +80,8 @@ const ElectronicsPosting = () => {
     model: '',
     condition: '',
     power: '',
+    dryerLoad:'',
+    heaterType:'',
     warranty: '',
     age: '',
     fuelType:'',
@@ -116,14 +97,45 @@ const ElectronicsPosting = () => {
     videoFile: null,
     name: ''
   });
+  const [postDetails, setPostDetails] = useState({
+    title: '',
+    description: '',
+    price: '',
+    images: [],
+  });
+  const [videoFile, setVideoFile] = useState(null);
 
-  const imageInputRef = useRef(null);
-  const videoInputRef = useRef(null);
+  // Add video upload handler
+  const handleVideoUpload = (e) => {
+    const file = e.target.files[0];
+    if (file && file.type.includes('video')) {
+      setVideoFile(file);
+    }
+  };
+  
+  // Add video remove handler
+  const removeVideo = () => {
+    setVideoFile(null);
+  };
+  const handleImageUpload = (e) => {
+    const files = Array.from(e.target.files);
+    setPostDetails(prev => ({
+      ...prev,
+      images: [...prev.images, ...files.slice(0, 14 - prev.images.length)]
+    }));
+  };
 
+  const removeImage = (index) => {
+    setPostDetails(prev => ({
+      ...prev,
+      images: prev.images.filter((_, i) => i !== index)
+    }));
+  };
   // Derived values
   const showCondition = ['Laptops', 'Computer components', 'Printers & photocopier', 'Gaming console', 'Digital Camera','Solar Panels'].includes(state.type);
-  const showBrand = ['Laptops', 'Computer components', 'Digital Camera', 'CCTV Camera', 'Drones', 'Heaters', 'Geysers','Ovens','Microwaves','Solar Panels','Solar Inverters','Batteries','Generators','UPS'].includes(state.type);
+  const showBrand = ['Laptops', 'Computer components', 'Digital Camera', 'CCTV Camera', 'Drones', 'Heaters', 'Geysers','Ovens','Microwaves','Solar Panels','Solar Inverters','Batteries','Generators','UPS','Washer','Spin Dryer','Washer&Dryer'].includes(state.type);
   const showBrandFromSubCat = ['Fans'].includes(state.subCategory);
+  const showCapacity = ['Air Conditions'].includes(state.type);
   const showSubTypeOptions = ['Computer components', 'Networking', 'Gaming console', 'Video Games', 'Controllers', 'Digital Camera', 'Air Conditions','Ovens','Solar Panels','Batteries'].includes(state.type);
   const showSubTypeOptionsFromSubCat = ['Fans'].includes(state.subCategory);
 
@@ -199,30 +211,6 @@ const ElectronicsPosting = () => {
     </div>
   );
 
-  const renderSubCategoryDropdown = () => (
-    <div className="position-absolute top-100 start-0 end-0 bg-white border rounded shadow-sm z-1 mt-1">
-      <div className="max-h-200 overflow-auto">
-        {subCategories.map((category, index) => (
-          <div
-            key={index}
-            className={`p-2 cursor-pointer ${state.subCategory === category ? 'bg-light' : ''}`}
-            onClick={() => {
-              updateState({ 
-                subCategory: category,
-                showSubCategoryDropdown: false,
-                type: '',
-                brand: '',
-                model: '',
-                condition: ''
-              });
-            }}
-          >
-            {category}
-          </div>
-        ))}
-      </div>
-    </div>
-  );
 
   const renderFormField = ({ type = 'text', label, name, value, onChange, options, required = true, placeholder, additionalText, radioOptions, colWidth = 'col-4' }) => (
     <div className="mb-3 d-flex align-items-center">
@@ -327,55 +315,7 @@ const ElectronicsPosting = () => {
 
             <div className="row align-items-around mb-3 p-3">
               <form onSubmit={handleSubmit}>
-                {/* Sub Category Dropdown */}
-                <div className="mb-3 d-flex align-items-center">
-                  <div className="row w-100">
-                    <div className="col-4">
-                      <label className="form-label"><b>Select Sub Category</b></label>
-                    </div>
-                    <div className="col-8 position-relative p-0">
-                      <div 
-                        className="form-control d-flex align-items-center cursor-pointer"
-                        onClick={() => updateState({ showSubCategoryDropdown: !state.showSubCategoryDropdown })}
-                      >
-                        <span>{state.subCategory}</span>
-                        <FiChevronDown className="ms-auto" />
-                      </div>
-                      {state.showSubCategoryDropdown && renderSubCategoryDropdown()}
-                    </div>
-                  </div>
-                </div>
-
-                {/* Type Dropdown */}
-                {state.subCategory !== 'Select Sub Category' && state.subCategory !== 'Fans' && (
-                  renderFormField({
-                    type: 'select',
-                    label: `What Kind of ${state.subCategory}`,
-                    value: state.type,
-                    onChange: (e) => updateState({ 
-                      type: e.target.value,
-                      brand: '',
-                      model: '',
-                      condition: ''
-                    }),
-                    options: optionsData.whattypeOptions[state.subCategory],
-                    colWidth: 'col-4'
-                  })
-                )}
-                {/* Condition Field */}
-                {showCondition && renderFormField({
-                  type: 'radio',
-                  label: 'Condition',
-                  name: 'condition',
-                  value: state.condition,
-                  onChange: (e) => updateState({ condition: e.target.value }),
-                  radioOptions: [
-                    { value: 'New', label: 'New' },
-                    { value: 'Used', label: 'Used' }
-                  ],
-                  colWidth: 'col-4'
-                })}
-
+               
                 {/* Brand Field */}
                 {(showBrand || showBrandFromSubCat) && renderFormField({
                   type: 'select',
@@ -444,6 +384,19 @@ const ElectronicsPosting = () => {
                   ],
                   colWidth: 'col-4'
                 })}
+ {/* Power source */}
+ {state.type === 'Washer&Dryer' && renderFormField({
+                  type: 'radio',
+                  label: 'Load',
+                  name: 'load',
+                  value: state.dryerLoad,
+                  onChange: (e) => updateState({ dryerLoad: e.target.value }),
+                  radioOptions: [
+                    { value: 'Top Load', label: 'Top Load' },
+                    { value: 'Front Load', label: 'Front Load' },
+                  ],
+                  colWidth: 'col-4'
+                })}
 
 
 
@@ -470,7 +423,7 @@ const ElectronicsPosting = () => {
                 })}
 
                 {/* Capacity Field */}
-                {state.type === 'Air Conditions' || state.type === 'Batteries'&& renderFormField({
+                {(state.type === 'Air Conditions' || state.type === 'Batteries')&& renderFormField({
                   type: 'text',
                   label: 'Capacity',
                   name: 'capacity',
@@ -487,6 +440,19 @@ const ElectronicsPosting = () => {
                   value: state.model,
                   onChange: (e) => updateState({ model: e.target.value }),
                   options: optionsData.models[state.brand],
+                  colWidth: 'col-4'
+                })}
+                {/* Condition Field */}
+                {(showCondition || selectedSubCat) && renderFormField({
+                  type: 'radio',
+                  label: 'Condition',
+                  name: 'condition',
+                  value: state.condition,
+                  onChange: (e) => updateState({ condition: e.target.value }),
+                  radioOptions: [
+                    { value: 'New', label: 'New' },
+                    { value: 'Used', label: 'Used' }
+                  ],
                   colWidth: 'col-4'
                 })}
 {/* wattage Field */}
@@ -539,16 +505,55 @@ const ElectronicsPosting = () => {
                   ],
                   colWidth: 'col-4'
                 })}
-{/* type for Irons invertor source */}
-{state.type === 'Irons' && renderFormField({
+{/* type for washer&dryer source */}
+{state.type === 'Washer&Dryer' && renderFormField({
                   type: 'radio',
                   label: 'Type',
                   name: 'type',
-                  value: state.power,
-                  onChange: (e) => updateState({ power: e.target.value }),
+                  value: state.subType,
+                  onChange: (e) => updateState({ subType: e.target.value }),
+                  radioOptions: [
+                    { value: 'Fully Automatic', label: 'Fully Automatic' },
+                    { value: 'Semi Automatic', label: 'Semi Automatic' }
+                  ],
+                  colWidth: 'col-4'
+                })}
+              {state.type === 'Irons' && renderFormField({
+                  type: 'radio',
+                  label: 'Type',
+                  name: 'type',
+                  value: state.subType,
+                  onChange: (e) => updateState({ subType: e.target.value }),
                   radioOptions: [
                     { value: 'Dry Iron', label: 'Dry Iron' },
                     { value: 'Steam Iron', label: 'Steam Iron' }
+                  ],
+                  colWidth: 'col-4'
+                })}
+
+{selectedType === 'Air Purifier & Humidfier' && renderFormField({
+                  type: 'radio',
+                  label: 'Type',
+                  name: 'type',
+                  value: state.subType,
+                  onChange: (e) => updateState({ subType: e.target.value }),
+                  radioOptions: [
+                    { value: 'Air Purifier', label: 'Air Purifier' },
+                    { value: 'Dehumidfiers', label: 'Dehumidfiers' },
+                    { value: 'Humidfier', label: 'Humidfier' }
+                  ],
+                  colWidth: 'col-4'
+                })}
+                {/* type for Geyser invertor source */}
+{state.type === 'Geysers' && renderFormField({
+                  type: 'radio',
+                  label: 'Type',
+                  name: 'type',
+                  value: state.heaterType,
+                  onChange: (e) => updateState({ heaterType: e.target.value }),
+                  radioOptions: [
+                    { value: 'Instant', label: 'Instant' },
+                    { value: 'Conventional Storage', label: 'Conventional Storage' }
                   ],
                   colWidth: 'col-4'
                 })}
@@ -594,8 +599,6 @@ const ElectronicsPosting = () => {
                   ],
                   colWidth: 'col-4'
                 })}
-
-                <hr />
 
                 {/* Product/Service Title */}
                 {renderFormField({
@@ -659,7 +662,115 @@ const ElectronicsPosting = () => {
                   )
                 })}
                 <hr />
+                <div className="mb-4">
+                  <div className="row w-100">
+                    <div className="col-4"><label className="form-label fw-bold">Upload Images</label></div>
+                    <div className="col-8 p-0">
+                      <div className="d-flex flex-wrap gap-2">
+                        {Array.from({ length: 14 }).map((_, index) => (
+                          <div 
+                            key={index} 
+                            className="border rounded position-relative"
+                            style={{
+                              width: '60px',
+                              height: '60px',
+                              backgroundColor: '#f7f7f7'
+                            }}
+                          >
+                            {postDetails.images[index] ? (
+                              <>
+                                <img
+                                  src={URL.createObjectURL(postDetails.images[index])}
+                                  alt={`Preview ${index}`}
+                                  className="w-100 h-100 object-fit-cover rounded"
+                                />
+                                <button
+                                  type="button"
+                                  className="position-absolute top-0 end-0 bg-danger rounded-circle p-0 border-0 d-flex align-items-center justify-content-center"
+                                  style={{ width: '20px', height: '20px', transform: 'translate(30%, -30%)' }}
+                                  onClick={() => removeImage(index)}
+                                >
+                                  <FiX className="text-white" style={{ fontSize: '10px' }} />
+                                </button>
+                              </>
+                            ) : (
+                              <label 
+                                htmlFor="image-upload"
+                                className="w-100 h-100 d-flex flex-column align-items-center justify-content-center cursor-pointer"
+                              >
+                                <FiPlus className="text-muted mb-1" />
+                              </label>
+                            )}
+                          </div>
+                        ))}
+                      </div>
+                      <input
+                        type="file"
+                        id="image-upload"
+                        className="d-none"
+                        accept="image/*"
+                        multiple
+                        onChange={handleImageUpload}
+                        disabled={postDetails.images.length >= 14}
+                      />
+                    </div>
+                  </div>
+                </div>
 
+                {/* Video Upload Field */}
+                <div className="mb-4">
+                  <div className="row w-100">
+                    <div className="col-4"> <label className="form-label fw-bold">Upload Video</label></div>
+                    <div className="col-8 p-0">
+                      <div className="d-flex">
+                        <div 
+                          className="border rounded position-relative"
+                          style={{
+                            width: '100%',
+                            height: '120px',
+                            backgroundColor: '#f7f7f7'
+                          }}
+                        >
+                          {videoFile ? (
+                            <>
+                              <video
+                                src={URL.createObjectURL(videoFile)}
+                                className="w-100 h-100 object-fit-cover rounded"
+                                controls
+                              />
+                              <button
+                                type="button"
+                                className="position-absolute top-0 end-0 bg-danger rounded-circle p-0 border-0 d-flex align-items-center justify-content-center"
+                                style={{ width: '20px', height: '20px', transform: 'translate(30%, -30%)' }}
+                                onClick={removeVideo}
+                              >
+                                <FiX className="text-white" style={{ fontSize: '10px' }} />
+                              </button>
+                            </>
+                          ) : (
+                            <label 
+                              htmlFor="video-upload"
+                              className="w-100 h-100 d-flex flex-column align-items-center justify-content-center cursor-pointer"
+                            >
+                              <FiPlus className="text-muted mb-1" />
+                              <small className="text-muted text-center" style={{ fontSize: '0.7rem' }}>
+                                Add Video
+                              </small>
+                            </label>
+                          )}
+                        </div>
+                      </div>
+                      <input
+                        type="file"
+                        id="video-upload"
+                        className="d-none"
+                        accept="video/*"
+                        onChange={handleVideoUpload}
+                      />
+                    </div>
+                  </div>
+                </div>
+                <hr />
                 {/* Contact Name */}
                 {renderFormField({
                   type: 'text',

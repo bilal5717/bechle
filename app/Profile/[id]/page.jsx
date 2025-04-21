@@ -1,7 +1,6 @@
 'use client';
 import Link from 'next/link';
 import { useParams } from "next/navigation";
-import 'bootstrap/dist/css/bootstrap.min.css';
 import { Calendar, Box, Star, StarHalf } from 'lucide-react';
 import { LuMapPin } from "react-icons/lu";
 

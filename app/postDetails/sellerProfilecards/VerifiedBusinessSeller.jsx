@@ -1,5 +1,4 @@
 import React from 'react';
-import './SellersProfile.css';
 import { FaWhatsapp } from 'react-icons/fa';
 import { MessageCircle ,Phone,CreditCard } from 'lucide-react';
 import { LuChevronRight } from 'react-icons/lu';

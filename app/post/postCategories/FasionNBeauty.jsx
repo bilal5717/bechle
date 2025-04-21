@@ -3,20 +3,22 @@ import React, { useState } from 'react';
 import { FiEdit, FiX, FiChevronDown, FiCheck, FiPlus, FiSearch } from 'react-icons/fi';
 import Switch from '@/app/components/Buttons/Tooglebtn';
 
-const CreateKidsPost = () => {
+const CreateFashionBeautyPost = ({selectedSubCat,selectedType}) => {
   // State Management
   const [showCategoryModal, setShowCategoryModal] = useState(false);
-  const [selectedCategory, setSelectedCategory] = useState('Select Category');
-  const [selectedKidsType, setSelectedKidsType] = useState('Select Type');
-  const [selectedSubKidsType, setSelectedSubKidsType] = useState('Select Sub-Type');
+  const [selectedCategory, setSelectedCategory] = useState('Fashion & Beauty');
+  const [selectedFashionType, setSelectedFashionType] = useState(selectedSubCat);
+  const [selectedSubFashionType, setSelectedSubFashionType] = useState(selectedType);
   const [brand, setBrand] = useState('');
   const [condition, setCondition] = useState('');
   const [ageRange, setAgeRange] = useState('');
-  const [showKidsTypeDropdown, setShowKidsTypeDropdown] = useState(false);
-  const [kidsTypeSearchTerm, setKidsTypeSearchTerm] = useState('');
+  const [showFashionTypeDropdown, setShowFashionTypeDropdown] = useState(false);
+  const [fashionTypeSearchTerm, setFashionTypeSearchTerm] = useState('');
   const [location, setLocation] = useState('');
   const [name, setName] = useState('');
   const [gender, setGender] = useState('');
+  const [type, setType] = useState('');
+  const [fabric, setFabric] = useState('');
   const [language, setLanguage] = useState('');
   const [postDetails, setPostDetails] = useState({
     title: '',
@@ -26,6 +28,54 @@ const CreateKidsPost = () => {
   });
   const [videoFile, setVideoFile] = useState(null);
 
+  // Fabric options for Eastern clothes
+  const fabricOptions = [
+    'Cotton', 'Silk', 'Linen', 'Chiffon', 'Georgette', 
+    'Velvet', 'Denim', 'Wool', 'Polyester', 'Blend', 'Others'
+  ];
+  const footwearCategory = [
+    'Boots', 'Casuals', 'Formals', 'Heels', 'Joggers', 
+    'Khussas', 'Kids Shoes', 'Medicated Shoes', 'Sandals', 'Soes Accessory', 'Slippers' ,'Sneakers' ,'Sports Shoes','Others'
+  ];
+  const bagTypeOptions = [
+    'Handbag', 'Backpack', 'Wallet', 'Clutch', 'Shoulder Bag', 'Tote', 'Laptop Bag', 'Other'
+  ];
+  
+  // Type options for Eastern clothes
+  const easternTypeOptions = [
+    'Kurta', 'Salwar Suit', 'Lehenga', 'Saree', 'Sherwani',
+    'Anarkali', 'Palazzo', 'Dhoti', 'Pathani', 'Others'
+  ];
+  const westernTypeOptions = [
+    'Jeans', 'T-shirt', 'Jacket', 'Blazer', 'Dress',
+    'Skirt', 'Trousers', 'Shirt', 'Coat', 'Other'
+  ];
+  const jewelleryTypeOptions = [
+    'Necklace', 'Ring', 'Bracelet', 'Earrings', 'Pendant',
+    'Bangles', 'Brooch', 'Anklet', 'Set', 'Other'
+  ];
+  
+  const jewelleryMaterialOptions = [
+    'Gold', 'Silver', 'Platinum', 'Artificial', 'Diamond', 'Pearl', 'Others'
+  ];
+  const hairCareProductOptions = [
+    'Shampoo', 'Conditioner', 'Hair Oil', 'Hair Serum', 'Hair Color', 
+    'Hair Spray', 'Hair Gel', 'Hair Mask', 'Other'
+  ];
+  const skinCareProductOptions = [
+    'Face Wash', 'Moisturizer', 'Cleanser', 'Sunscreen', 'Night Cream',
+    'Face Serum', 'Scrub', 'Toner', 'Lip Balm', 'Anti-Aging', 'Other'
+  ];
+  const watchCategoryOptions = [
+    'Analog', 'Digital', 'Smartwatch', 'Chronograph', 'Luxury', 'Fitness Tracker', 'Pocket Watch', 'Other'
+  ];
+  const fragranceTypeOptions = [
+    'Eau de Parfum', 'Eau de Toilette', 'Body Spray', 'Cologne', 'Attar', 'Other'
+  ];
+  const shouldHideGender = 
+  ['Hijabs & Abayas', 'Hair Care', 'Skin Care'].includes(selectedType) ||
+  ['Makeup', 'Fragrance'].includes(selectedSubCat);
+
   // Add video upload handler
   const handleVideoUpload = (e) => {
     const file = e.target.files[0];
@@ -33,25 +83,15 @@ const CreateKidsPost = () => {
       setVideoFile(file);
     }
   };
-  const languages = ['English', 'Hindi', 'Bengali', 'Tamil', 'Telugu', 'Marathi', 'Gujarati', 'Others'];
+  
   // Add video remove handler
   const removeVideo = () => {
     setVideoFile(null);
   };
   
   // Data Constants
-  const kidsSubTypes = {
-    'Clothes': ['T-Shirts', 'Jeans', 'Dresses', 'Shirts', 'Jackets'],
-    'Fashion Accessories': ['Bags', 'Belts', 'Hats', 'Sunglasses', 'Wallets'],
-    'Makeup': ['Foundation', 'Lipstick', 'Eyeshadow', 'Mascara', 'Blush'],
-    'Skin & Hair': ['Shampoo', 'Conditioner', 'Face Wash', 'Moisturizer', 'Serum'],
-    'Wedding': ['Bridal', 'Grooms', 'Formal'],
-    'Bags': [],
-    'Jewellery': [],
-    'Footwear': ['valu', 'val', 'bh'],
-    'Watches': ['Men Watches', 'Womens Watches', 'Kids Watches' ,'Pocket Watch' ,'Watch Accessories'],
-    'Fragrance': ['Perfumes', 'Body Sprays', 'Attar','Others'],
-    'Books & Magazines': ['Books', 'Magazines', 'Dictionaries', 'Stationary Items', 'Calculators'],
+  const fashionSubTypes = {
+    'Eastern': easternTypeOptions,
   };
 
   const categories = [
@@ -60,40 +100,14 @@ const CreateKidsPost = () => {
     { id: 3, name: 'Electronics', icon: '📱' },
     { id: 4, name: 'Furniture', icon: '🛋️' },
     { id: 5, name: 'Jobs', icon: '💼' },
-    { id: 6, name: 'Kids', icon: '👶' },
+    { id: 6, name: 'Fashion & Beauty', icon: '👗' },
     { id: 7, name: 'Services', icon: '🔧' },
   ];
 
-  const kidsTypes = [
-    'Clothes',
-    'Fashion Accessories',
-    'Makeup',
-    'Skin & Hair',
-    'Wedding',
-    'Footwear',
-    'Bags',
-    'Jewellery',
-    'Watches',
-    'Fragrance',
-    'Others'
-  ];
+  const fashionTypes = ['Eastern'];
   
   const conditionOptions = ['New', 'Used'];
-  
-  // List of kids types that should show gender field
-  const genderSpecificKidsTypes = ['Clothes', 'Footwear', 'Bags', 'Jewellery', 'Fragrance'];
-
-  // Derived Values
-  const filteredKidsTypes = kidsTypes.filter(option => 
-    option.toLowerCase().includes(kidsTypeSearchTerm.toLowerCase())
-  );
-
-  const showKidsDetailsFields = selectedKidsType !== 'Others' && 
-                              selectedKidsType !== 'Select Type' && 
-                              kidsSubTypes[selectedKidsType];
-  
-  // Check if gender field should be shown
-  const showGenderField = genderSpecificKidsTypes.includes(selectedKidsType);
+  const genderOptions = ['Male', 'Female', 'Unisex', 'Girl', 'Boy'];
 
   // Event Handlers
   const handleInputChange = (e) => {
@@ -121,13 +135,14 @@ const CreateKidsPost = () => {
     const submissionData = {
       ...postDetails,
       category: selectedCategory,
-      kidsType: selectedKidsType,
-      subKidsType: selectedSubKidsType,
+      fashionType: selectedFashionType,
+      subFashionType: selectedSubFashionType,
+      type,
+      fabric,
       brand,
       condition,
       ageRange,
-      language,
-      gender: showGenderField ? gender : undefined
+      gender
     };
     console.log('Post submitted:', submissionData);
   };
@@ -173,42 +188,6 @@ const CreateKidsPost = () => {
     </div>
   );
 
-  const renderKidsTypeDropdown = () => (
-    <div className="position-absolute top-100 start-0 end-0 mx-5 bg-white border rounded shadow-sm z-1 mt-1">
-      <div className="max-h-200 overflow-auto">
-        <div className="p-2 border-bottom">
-          <div className="input-group">
-            <span className="input-group-text">
-              <FiSearch />
-            </span>
-            <input
-              type="text"
-              className="form-control"
-              placeholder="Search kids types..."
-              value={kidsTypeSearchTerm}
-              onChange={(e) => setKidsTypeSearchTerm(e.target.value)}
-              autoFocus
-            />
-          </div>
-        </div>
-        {filteredKidsTypes.map((type, index) => (
-          <div
-            key={index}
-            className={`p-2 cursor-pointer ${selectedKidsType === type ? 'bg-light' : ''}`}
-            onClick={() => {
-              setSelectedKidsType(type);
-              setSelectedSubKidsType('Select Sub-Type');
-              setShowKidsTypeDropdown(false);
-              setKidsTypeSearchTerm('');
-            }}
-          >
-            {type}
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-
   return (
     <div className="container mt-4 mb-5">
       <div className="row justify-content-center">
@@ -244,153 +223,267 @@ const CreateKidsPost = () => {
 
             <div className="row align-items-around mb-3 p-3">
               <form onSubmit={handleSubmit}>
-                {/* Type Selection Field */}
-                <div className="mb-3 d-flex align-items-center">
-                  <div className="row w-100">
-                    <div className="col-4">
-                      <label className="form-label"><b>Select Sub Category</b></label>
-                    </div>
-                    <div className="col-8 position-relative p-0">
-                      <div 
-                        className="form-control d-flex align-items-center cursor-pointer"
-                        onClick={() => setShowKidsTypeDropdown(!showKidsTypeDropdown)}
-                      >
-                        <span>{selectedKidsType}</span>
-                      </div>
-                      {showKidsTypeDropdown && renderKidsTypeDropdown()}
-                    </div>
-                  </div>
-                </div>
+               {/* Type Field - Dropdown for Eastern or Western clothes */}
+               {(selectedType === 'Eastern' || selectedType === 'Western' || selectedSubCat === 'Bags' || selectedSubCat === 'Jewellery') && (
+  <div className="mb-3 d-flex align-items-center">
+    <div className="row w-100">
+      <div className="col-4">
+        <label className="form-label"><b>Type</b></label>
+      </div>
+      <div className="col-8 position-relative p-0">
+        <select
+          className="form-select"
+          value={type}
+          onChange={(e) => setType(e.target.value)}
+          required
+        >
+          <option value="" disabled>Select Type</option>
+          {(selectedType === 'Eastern'
+            ? easternTypeOptions
+            : selectedType === 'Western'
+            ? westernTypeOptions
+            : selectedSubCat === 'Bags'
+            ? bagTypeOptions
+            : selectedSubCat === 'Jewellery'
+            ? jewelleryTypeOptions
+            : []
+          ).map((option, index) => (
+            <option key={index} value={option}>{option}</option>
+          ))}
+        </select>
+      </div>
+    </div>
+  </div>
+)}
 
-                {/* Kids Details Fields */}
-                {showKidsDetailsFields && (
-                  <>
-                    {/* Show "What Type Of [selectedKidsType]" field only for specific categories */}
-                    {['Clothes', 'Fashion Accessories', 'Makeup', 'Skin & Hair', 'Wedding','Fragrance','Footwear','Watches'].includes(selectedKidsType) && (
-                      <div className="mb-3 d-flex align-items-center">
-                        <div className="row w-100">
-                          <div className="col-4">
-                            <label className="form-label"><b>What Type Of {selectedKidsType}</b></label>
-                          </div>
-                          <div className="col-8 position-relative p-0">
-                            <select
-                              className="form-select"
-                              value={selectedSubKidsType}
-                              onChange={(e) => setSelectedSubKidsType(e.target.value)}
-                              required
-                            >
-                              <option disabled value="Select Sub-Type">Select Sub-Type</option>
-                              {kidsSubTypes[selectedKidsType]?.map((subType, index) => (
-                                <option key={index} value={subType}>{subType}</option>
-                              ))}
-                            </select>
-                          </div>
-                        </div>
-                      </div>
-                    )}
-                    
-                    {/* Language Field - shown only for Books & Magazines */}
-                    {selectedKidsType === 'Books & Magazines' && (
-                      <div className="mb-3 d-flex align-items-center">
-                        <div className="row w-100">
-                          <div className="col-4">
-                            <label className="form-label"><b>Language</b></label>
-                          </div>
-                          <div className="col-8 position-relative p-0">
-                            <select
-                              className="form-select"
-                              value={language}
-                              onChange={(e) => setLanguage(e.target.value)}
-                              required
-                            >
-                              <option value="" disabled>Select Language</option>
-                              {languages.map((lang, index) => (
-                                <option key={index} value={lang}>{lang}</option>
-                              ))}
-                            </select>
-                          </div>
-                        </div>
-                      </div>
-                    )}
-                    
-                    {/* Gender Field - shown only for specific kids types */}
-                    {showGenderField && (
-                      <div className="mb-3 d-flex align-items-center">
-                        <div className="row w-100">
-                          <div className="col-4">
-                            <label className="form-label"><b>Gender</b></label>
-                          </div>
-                          <div className="col-8 p-0">
-                            <div className="d-flex gap-2">
-                              <button
-                                type="button"
-                                className={`btn ${gender === 'Male' ? 'btn-warning' : 'btn-outline-secondary'}`}
-                                onClick={() => setGender('Male')}
-                                style={{
-                                  flex: 1,
-                                  padding: '0.375rem 0.75rem',
-                                  border: '1px solid #dee2e6',
-                                  borderRadius: '0.25rem'
-                                }}
-                              >
-                                Male
-                              </button>
-                             
-                              <button
-                                type="button"
-                                className={`btn ${gender === 'Female' ? 'btn-warning' : 'btn-outline-secondary'}`}
-                                onClick={() => setGender('Female')}
-                                style={{
-                                  flex: 1,
-                                  padding: '0.375rem 0.75rem',
-                                  border: '1px solid #dee2e6',
-                                  borderRadius: '0.25rem'
-                                }}
-                              >
-                                Female
-                              </button>
-                              {selectedKidsType !== 'Jewellery' &&  selectedKidsType !== 'Bags' && (
-                              <button
-                                type="button"
-                                className={`btn ${gender === 'unisex' ? 'btn-warning' : 'btn-outline-secondary'}`}
-                                onClick={() => setGender('unisex')}
-                                style={{
-                                  flex: 1,
-                                  padding: '0.375rem 0.75rem',
-                                  border: '1px solid #dee2e6',
-                                  borderRadius: '0.25rem'
-                                }}
-                              >
-                                UniSex
-                              </button>
-                               )}
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    )}
-                    
-                    <hr />
-                  </>
-                )}
+{selectedSubCat === 'Jewellery' && (
+  <div className="mb-3 d-flex align-items-center">
+    <div className="row w-100">
+      <div className="col-4">
+        <label className="form-label"><b>Material</b></label>
+      </div>
+      <div className="col-8 position-relative p-0">
+        <select
+          className="form-select"
+          value={fabric}
+          onChange={(e) => setFabric(e.target.value)}
+          required
+        >
+          <option value="" disabled>Select Material</option>
+          {jewelleryMaterialOptions.map((option, index) => (
+            <option key={index} value={option}>{option}</option>
+          ))}
+        </select>
+      </div>
+    </div>
+  </div>
+)}
 
-                {/* Condition Field - shown for all types */}
+ {/* Category Field for Footwear or Watches */}
+{(selectedSubCat === 'Footwear' || selectedSubCat === 'Watches') && (
+  <div className="mb-3 d-flex align-items-center">
+    <div className="row w-100">
+      <div className="col-4">
+        <label className="form-label"><b>Category</b></label>
+      </div>
+      <div className="col-8 position-relative p-0">
+        <select
+          className="form-select"
+          value={fabric}
+          onChange={(e) => setFabric(e.target.value)}
+          required
+        >
+          <option value="" disabled>Select Category</option>
+          {(selectedSubCat === 'Footwear' ? footwearCategory : watchCategoryOptions).map((option, index) => (
+            <option key={index} value={option}>{option}</option>
+          ))}
+        </select>
+      </div>
+    </div>
+  </div>
+)}
+{selectedSubCat === 'Fragrance' && (
+  <div className="mb-3 d-flex align-items-center">
+    <div className="row w-100">
+      <div className="col-4">
+        <label className="form-label"><b>Category</b></label>
+      </div>
+      <div className="col-8 p-0">
+        <div className="btn-group w-100 gap-2" role="group">
+          {['Men', 'Women', 'Unisex'].map((option) => (
+            <React.Fragment key={option}>
+              <input
+                type="radio"
+                className="btn-check"
+                name="fragranceCategory"
+                id={`fragrance-${option}`}
+                value={option}
+                checked={gender === option}
+                onChange={() => setGender(option)}
+              />
+              <label
+                className="btn btn-outline-secondary"
+                htmlFor={`fragrance-${option}`}
+              >
+                {option}
+              </label>
+            </React.Fragment>
+          ))}
+        </div>
+      </div>
+    </div>
+  </div>
+)}
+{selectedSubCat === 'Fragrance' && (
+  <div className="mb-3 d-flex align-items-center">
+    <div className="row w-100">
+      <div className="col-4">
+        <label className="form-label"><b>Type</b></label>
+      </div>
+      <div className="col-8 position-relative p-0">
+        <select
+          className="form-select"
+          value={type}
+          onChange={(e) => setType(e.target.value)}
+          required
+        >
+          <option value="" disabled>Select Type</option>
+          {fragranceTypeOptions.map((option, index) => (
+            <option key={index} value={option}>{option}</option>
+          ))}
+        </select>
+      </div>
+    </div>
+  </div>
+)}
+
+
+{(selectedType === 'Hair Care' || selectedType === 'Skin Care') && (
+  <div className="mb-3 d-flex align-items-center">
+    <div className="row w-100">
+      <div className="col-4">
+        <label className="form-label"><b>Products</b></label>
+      </div>
+      <div className="col-8 position-relative p-0">
+        <select
+          className="form-select"
+          value={type}
+          onChange={(e) => setType(e.target.value)}
+          required
+        >
+          <option value="" disabled>Select Product</option>
+          {(selectedType === 'Hair Care'
+            ? hairCareProductOptions
+            : selectedType === 'Skin Care'
+            ? skinCareProductOptions
+            : []
+          ).map((option, index) => (
+            <option key={index} value={option}>{option}</option>
+          ))}
+        </select>
+      </div>
+    </div>
+  </div>
+)}
+
+
+                {/* Fabric Field - Dropdown */}
+               {selectedType === 'Eastern' &&(
+                 <div className="mb-3 d-flex align-items-center">
+                 <div className="row w-100">
+                   <div className="col-4">
+                     <label className="form-label"><b>Fabric</b></label>
+                   </div>
+                   <div className="col-8 position-relative p-0">
+                     <select
+                       className="form-select"
+                       value={fabric}
+                       onChange={(e) => setFabric(e.target.value)}
+                       required
+                     >
+                       <option value="" disabled>Select Fabric</option>
+                       {fabricOptions.map((option, index) => (
+                         <option key={index} value={option}>{option}</option>
+                       ))}
+                     </select>
+                   </div>
+                 </div>
+               </div>
+
+               )}
+                {/* Gender Field */}
+{!shouldHideGender && (
+  <div className="mb-3 d-flex align-items-center">
+    <div className="row w-100">
+      <div className="col-4">
+        <label className="form-label"><b>Gender</b></label>
+      </div>
+      <div className="col-8 p-0">
+        <div className="d-flex gap-2 flex-wrap">
+          {genderOptions.map((option, index) => (
+            <button
+              key={index}
+              type="button"
+              className={`btn ${gender === option ? 'btn-primary' : 'btn-outline-primary'}`}
+              onClick={() => setGender(option)}
+              style={{
+                padding: '0.375rem 0.75rem',
+                border: '1px solid #dee2e6',
+                borderRadius: '0.25rem'
+              }}
+            >
+              {option}
+            </button>
+          ))}
+        </div>
+      </div>
+    </div>
+  </div>
+)}
+
+                {/* Condition Field */}
                 <div className="mb-3">
                   <div className="row w-100 align-items-center">
                     <div className="col-4">
                       <label className="form-label"><b>Condition</b></label>
                     </div>
                     <div className="col-8">
-                      {conditionOptions.map((option, index) => (
-                        <button
-                          key={index}
-                          type="button"
-                          className={`btn me-2 mb-2 ${condition === option ? 'btn-primary' : 'btn-outline-primary'}`}
-                          onClick={() => setCondition(option)}
-                        >
-                          {option}
-                        </button>
-                      ))}
+                      <div className="d-flex gap-2 flex-wrap">
+                        {conditionOptions.map((option, index) => (
+                          <button
+                            key={index}
+                            type="button"
+                            className={`btn ${condition === option ? 'btn-primary' : 'btn-outline-primary'}`}
+                            onClick={() => setCondition(option)}
+                            style={{
+                              padding: '0.375rem 0.75rem',
+                              border: '1px solid #dee2e6',
+                              borderRadius: '0.25rem'
+                            }}
+                          >
+                            {option}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <hr />
+
+                {/* Brand Field */}
+                <div className="mb-3 d-flex align-items-center">
+                  <div className="row w-100">
+                    <div className="col-4">
+                      <label className="form-label"><b>Brand</b></label>
+                    </div>
+                    <div className="col-8 p-0">
+                      <input
+                        type="text"
+                        className="form-control"
+                        placeholder="Enter brand name (optional)"
+                        value={brand}
+                        onChange={(e) => setBrand(e.target.value)}
+                      />
                     </div>
                   </div>
                 </div>
@@ -656,4 +749,4 @@ const CreateKidsPost = () => {
   );
 };
 
-export default CreateKidsPost;
+export default CreateFashionBeautyPost;

@@ -15,8 +15,6 @@ const CATEGORIES = [
   { id: 8, name: 'Business/Industrial/Agriculture', icon: '🏭' },
 ];
 
-const SUB_CATEGORIES = ['Tablets', 'Accessories', 'Mobile Phones', 'Smart Watches'];
-
 const MOBILE_BRANDS = [
   'Apple', 'Samsung', 'Huawei', 'Xiaomi', 'Oppo', 'Vivo', 
   'Realme', 'OnePlus', 'Nokia', 'Sony', 'LG', 'Other'
@@ -37,31 +35,18 @@ const MOBILE_MODELS = {
   'Other': ['Other']
 };
 
-const WATCH_MODELS = {
-  'Apple': ['Watch Series 8', 'Watch SE', 'Watch Ultra', 'Other'],
-  'Samsung': ['Galaxy Watch 5', 'Galaxy Watch 4', 'Other'],
-  'Huawei': ['Watch GT 3', 'Watch GT 2', 'Other'],
-  'Xiaomi': ['Mi Band 7', 'Mi Watch', 'Other'],
-  'Fitbit': ['Versa 4', 'Sense 2', 'Other'],
-  'Garmin': ['Venu 2', 'Fenix 7', 'Other'],
-  'Other': ['Other']
-};
+
 
 const TABLET_BRANDS = ['Apple', 'Samsung', 'Huawei', 'Lenovo', 'Microsoft', 'Amazon', 'Other'];
 const WATCH_BRANDS = ['Apple', 'Samsung', 'Huawei', 'Xiaomi', 'Fitbit', 'Garmin', 'Other'];
 
-const ACCESSORY_TYPES = [
-  'Charging Cables', 'Converters', 'Chargers', 'Screens', 'Screen Protector', 
-  'Mobile Stands', 'Ring Lights', 'Selfie Sticks', 'Power Banks', 'Headphones', 
-  'EarPhones', 'Covers & Cases', 'External Memory', 'Other'
-];
 
 const CHARGING_CABLE_TYPES = ['USB-C', 'Lightning', 'Micro USB', 'USB-A to USB-C', 'USB-A to Lightning', 'Other'];
 const CHARGER_TYPES = ['Fast Charger', 'Wireless Charger', 'Car Charger', 'Travel Charger', 'Other'];
 const DEVICE_TYPES = ['Tablet', 'Mobile', 'Smart Watch'];
 const HEADPHONE_TYPES = ['Wired', 'Wireless'];
-const CONDITION_OPTIONS = ['New', 'Used'];
-const PTA_OPTIONS = ['PTA Approved', 'Non PTA'];
+const CONDITION_OPTIONS = ['New', 'Used','Open Box','Refurbished'];
+const PTA_OPTIONS = ['PTA Approved', 'Non PTA','JV','Factory Lock'];
 
 // ====================== REUSABLE COMPONENTS ======================
 const SelectInput = ({ value, onChange, options = [], placeholder, required = true }) => (
@@ -162,56 +147,62 @@ const CategoryModal = ({ show, onClose, selectedCategory, onSelect }) => (
   </div>
 );
 
-const SubCategoryDropdown = ({ show, value, options, onSelect, onToggle }) => (
-  <div className="position-relative">
-    <div 
-      className="form-control d-flex align-items-center cursor-pointer"
-      onClick={onToggle}
-      role="button"
-      tabIndex={0}
-    >
-      <span>{value}</span>
-      <FiChevronDown className="ms-auto" />
-    </div>
-    {show && (
-      <div className="position-absolute top-100 start-0 end-0 bg-white border rounded shadow-sm z-1 mt-1">
-        <div className="max-h-200 overflow-auto">
-          {options.map((category, index) => (
-            <div
-              key={index}
-              className={`p-2 cursor-pointer ${value === category ? 'bg-light' : ''}`}
-              onClick={() => onSelect(category)}
-            >
-              {category}
-            </div>
-          ))}
-        </div>
-      </div>
-    )}
-  </div>
-);
+
 
 // ====================== MAIN COMPONENT ======================
-const MobilesPosting = () => {
+const MobilesPosting = ({selectedCat,selectedSubCatOption,selectedAccessory}) => {
+  console.log("selected category" ,selectedCat,"selected sub cat" ,selectedSubCatOption,"accesooryType",selectedAccessory);
   // ====================== STATE MANAGEMENT ======================
   const [showCategoryModal, setShowCategoryModal] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState('Mobiles');
-  const [subCategory, setSubCategory] = useState('Select Sub Category');
-  const [showSubCategoryDropdown, setShowSubCategoryDropdown] = useState(false);
+  const [subCategory, setSubCategory] = useState(selectedCat || selectedSubCatOption);
   const [brand, setBrand] = useState('');
   const [model, setModel] = useState('');
   const [condition, setCondition] = useState('');
   const [ptaStatus, setPtaStatus] = useState('');
   const [storage, setStorage] = useState('');
-  const [memory, setMemory] = useState('');
-  const [accessoryType, setAccessoryType] = useState('');
+  const [batteryStatus, setBatteryStatus] = useState('');
+  const [accessoryType, setAccessoryType] = useState(selectedAccessory || '');
   const [price, setPrice] = useState('');
+  const [storageUnit,setStorageUnit]=useState('GB');
   const [location, setLocation] = useState('');
+  const [memory, setMemory] = useState('');
+const [memoryUnit, setMemoryUnit] = useState('GB');
   const [postDetails, setPostDetails] = useState({
     title: '',
     description: '',
     contactName: '',
+    images: [],
   });
+  const [videoFile, setVideoFile] = useState(null);
+
+  // Add video upload handler
+  const handleVideoUpload = (e) => {
+    const file = e.target.files[0];
+    if (file && file.type.includes('video')) {
+      setVideoFile(file);
+    }
+  };
+  
+  // Add video remove handler
+  const removeVideo = () => {
+    setVideoFile(null);
+  };
+
+  const handleImageUpload = (e) => {
+    const files = Array.from(e.target.files);
+    setPostDetails(prev => ({
+      ...prev,
+      images: [...prev.images, ...files.slice(0, 14 - prev.images.length)]
+    }));
+  };
+
+  const removeImage = (index) => {
+    setPostDetails(prev => ({
+      ...prev,
+      images: prev.images.filter((_, i) => i !== index)
+    }));
+  };
   const [chargingCableType, setChargingCableType] = useState('');
   const [deviceType, setDeviceType] = useState('');
   const [chargerType, setChargerType] = useState('');
@@ -224,12 +215,17 @@ const MobilesPosting = () => {
   const isSmartWatches = useMemo(() => subCategory === 'Smart Watches', [subCategory]);
   
   const showBrandDropdown = useMemo(() => 
-    subCategory && subCategory !== 'Select Sub Category' && subCategory !== 'Accessories', 
+    subCategory && subCategory === 'Mobile Phones' || subCategory && subCategory === 'Tablets' || subCategory && subCategory === 'Smart Watches', 
     [subCategory]);
   
   const showModelDropdown = useMemo(() => 
-    (isMobilePhones || isSmartWatches) && brand, 
-    [isMobilePhones, isSmartWatches, brand]);
+    subCategory === 'Mobile Phones' && brand, 
+    [subCategory, brand]);
+  
+  const showMobileDetailsFields = useMemo(() => 
+    subCategory === 'Mobile Phones' && brand && model, 
+    [subCategory, brand, model]);
+  
   
   const showConditionField = useMemo(() => 
     isMobilePhones || isTablets || isSmartWatches || 
@@ -302,13 +298,33 @@ const MobilesPosting = () => {
     setShowCategoryModal(false);
   };
 
-  const handleSubCategorySelect = (category) => {
-    setSubCategory(category);
-    setShowSubCategoryDropdown(false);
-    resetDetails();
-  };
 
   // ====================== RENDER FUNCTIONS ======================
+  const renderBatteryStatusField = () => (
+    <div className="mb-3 d-flex align-items-center">
+      <div className="row w-100">
+        <div className="col-4">
+          <label className="form-label"><b>Battery Status (%)</b></label>
+        </div>
+        <div className="col-8 p-0">
+          <TextInput
+            value={batteryStatus}
+            onChange={(e) => {
+              let value = e.target.value;
+              // Ensure value is between 0 and 100
+              if (value > 100) value = 100;
+              if (value < 0) value = 0;
+              setBatteryStatus(value);
+            }}
+            placeholder="Enter battery health percentage"
+            type="number"
+            min={0}
+            max={100}
+          />
+        </div>
+      </div>
+    </div>
+  );
   const renderBrandDropdown = () => (
     <div className="mb-3 d-flex align-items-center">
       <div className="row w-100">
@@ -347,7 +363,6 @@ const MobilesPosting = () => {
             onChange={(e) => setModel(e.target.value)}
             options={
               isMobilePhones ? MOBILE_MODELS[brand] || [] : 
-              isSmartWatches ? WATCH_MODELS[brand] || [] : 
               []
             }
             placeholder="Select Model"
@@ -359,22 +374,7 @@ const MobilesPosting = () => {
 
   const renderAccessoryFields = () => (
     <>
-      {/* Accessory Type */}
-      <div className="mb-3 d-flex align-items-center">
-        <div className="row w-100">
-          <div className="col-4">
-            <label className="form-label"><b>Accessory Type</b></label>
-          </div>
-          <div className="col-8 p-0">
-            <SelectInput
-              value={accessoryType}
-              onChange={(e) => setAccessoryType(e.target.value)}
-              options={ACCESSORY_TYPES}
-              placeholder="Select Accessory Type"
-            />
-          </div>
-        </div>
-      </div>
+     
 
       {/* Charging Cable Type */}
       {showChargingCableType && (
@@ -492,41 +492,68 @@ const MobilesPosting = () => {
 
   const renderStorageField = () => (
     <div className="mb-3 d-flex align-items-center">
-      <div className="row w-100">
+      <div className="row w-100 align-items-center">
         <div className="col-4">
-          <label className="form-label"><b>Storage (GB)</b></label>
+          <label className="form-label mb-0"><b>Storage</b></label>
         </div>
-        <div className="col-8 p-0">
-          <TextInput
-            value={storage}
-            onChange={(e) => setStorage(e.target.value)}
-            placeholder="Enter storage capacity in GB"
-            type="number"
-            min={0}
-          />
+        <div className="col-8  p-0">
+          <div className="input-group">
+            <input
+              value={storage}
+              onChange={(e) => setStorage(e.target.value)}
+              placeholder="Enter storage"
+              type="number"
+              min={0}
+              className="form-control"
+            />
+            <select
+              className="form-select"
+              value={storageUnit}
+              onChange={(e) => setStorageUnit(e.target.value)}
+              style={{ maxWidth: '100px' }}
+            >
+              <option value="GB">GB</option>
+              <option value="TB">TB</option>
+              <option value="TB">MB</option>
+            </select>
+          </div>
         </div>
       </div>
     </div>
   );
+  
 
   const renderMemoryField = () => (
     <div className="mb-3 d-flex align-items-center">
-      <div className="row w-100">
+      <div className="row w-100 align-items-center">
         <div className="col-4">
-          <label className="form-label"><b>RAM (GB)</b></label>
+          <label className="form-label mb-0"><b>RAM</b></label>
         </div>
         <div className="col-8 p-0">
-          <TextInput
-            value={memory}
-            onChange={(e) => setMemory(e.target.value)}
-            placeholder="Enter RAM in GB"
-            type="number"
-            min={0}
-          />
+          <div className="input-group">
+            <input
+              value={memory}
+              onChange={(e) => setMemory(e.target.value)}
+              placeholder="Enter RAM"
+              type="number"
+              min={0}
+              className="form-control"
+            />
+            <select
+              className="form-select"
+              value={memoryUnit}
+              onChange={(e) => setMemoryUnit(e.target.value)}
+              style={{ maxWidth: '100px' }}
+            >
+              <option value="GB">GB</option>
+              <option value="TB">MB</option>
+            </select>
+          </div>
         </div>
       </div>
     </div>
   );
+  
 
   // ====================== MAIN RENDER ======================
   return (
@@ -567,33 +594,40 @@ const MobilesPosting = () => {
             {/* Main Form Content */}
             <div className="row align-items-around mb-3 p-3">
               <form onSubmit={handleSubmit}>
-                {/* Sub Category Dropdown */}
-                <div className="mb-3 d-flex align-items-center">
-                  <div className="row w-100">
-                    <div className="col-4">
-                      <label className="form-label"><b>Select Sub Category</b></label>
-                    </div>
-                    <div className="col-8 position-relative p-0">
-                      <SubCategoryDropdown
-                        show={showSubCategoryDropdown}
-                        value={subCategory}
-                        options={SUB_CATEGORIES}
-                        onSelect={handleSubCategorySelect}
-                        onToggle={() => setShowSubCategoryDropdown(!showSubCategoryDropdown)}
-                      />
-                    </div>
-                  </div>
-                </div>
+               
 
                 {/* Dynamic Fields Based on Selection */}
                 {showBrandDropdown && renderBrandDropdown()}
                 {showModelDropdown && renderModelDropdown()}
                 {showAccessoryTypeField && renderAccessoryFields()}
-                {showConditionField && renderConditionField()}
-                {showPtaField && renderPtaField()}
-                {showStorageField && renderStorageField()}
-                {showMemoryField && renderMemoryField()}
-
+                {showConditionField && showMobileDetailsFields && renderConditionField()}
+                {showPtaField && showMobileDetailsFields && renderPtaField()}
+                {showStorageField && showMobileDetailsFields && renderStorageField()}
+                {showMemoryField && showMobileDetailsFields && renderMemoryField()}
+                {showMobileDetailsFields &&(
+                  <div className="mb-3 d-flex align-items-center">
+                  <div className="row w-100">
+                    <div className="col-4">
+                      <label className="form-label"><b>Battery Status (%)</b></label>
+                    </div>
+                    <div className="col-8 p-0">
+                      <TextInput
+                        value={batteryStatus}
+                        onChange={(e) => {
+                          let value = e.target.value;
+                          if (value > 100) value = 100;
+                          if (value < 0) value = 0;
+                          setBatteryStatus(value);
+                        }}
+                        placeholder="Enter battery health percentage"
+                        type="number"
+                        min={1}
+                        max={100}
+                      />
+                    </div>
+                  </div>
+                </div>
+                )}
                 <hr />
 
                 {/* Product/Service Title */}
@@ -698,7 +732,114 @@ const MobilesPosting = () => {
                   </div>
                 </div>
                 <hr />
+                <div className="mb-4">
+                  <div className="row w-100">
+                    <div className="col-4"><label className="form-label fw-bold">Upload Images</label></div>
+                    <div className="col-8 p-0">
+                      <div className="d-flex flex-wrap gap-2">
+                        {Array.from({ length: 14 }).map((_, index) => (
+                          <div 
+                            key={index} 
+                            className="border rounded position-relative"
+                            style={{
+                              width: '60px',
+                              height: '60px',
+                              backgroundColor: '#f7f7f7'
+                            }}
+                          >
+                            {postDetails.images[index] ? (
+                              <>
+                                <img
+                                  src={URL.createObjectURL(postDetails.images[index])}
+                                  alt={`Preview ${index}`}
+                                  className="w-100 h-100 object-fit-cover rounded"
+                                />
+                                <button
+                                  type="button"
+                                  className="position-absolute top-0 end-0 bg-danger rounded-circle p-0 border-0 d-flex align-items-center justify-content-center"
+                                  style={{ width: '20px', height: '20px', transform: 'translate(30%, -30%)' }}
+                                  onClick={() => removeImage(index)}
+                                >
+                                  <FiX className="text-white" style={{ fontSize: '10px' }} />
+                                </button>
+                              </>
+                            ) : (
+                              <label 
+                                htmlFor="image-upload"
+                                className="w-100 h-100 d-flex flex-column align-items-center justify-content-center cursor-pointer"
+                              >
+                                <FiPlus className="text-muted mb-1" />
+                              </label>
+                            )}
+                          </div>
+                        ))}
+                      </div>
+                      <input
+                        type="file"
+                        id="image-upload"
+                        className="d-none"
+                        accept="image/*"
+                        multiple
+                        onChange={handleImageUpload}
+                        disabled={postDetails.images.length >= 14}
+                      />
+                    </div>
+                  </div>
+                </div>
 
+                {/* Video Upload Field */}
+                <div className="mb-4">
+                  <div className="row w-100">
+                    <div className="col-4"> <label className="form-label fw-bold">Upload Video</label></div>
+                    <div className="col-8 p-0">
+                      <div className="d-flex">
+                        <div 
+                          className="border rounded position-relative"
+                          style={{
+                            width: '100%',
+                            height: '120px',
+                            backgroundColor: '#f7f7f7'
+                          }}
+                        >
+                          {videoFile ? (
+                            <>
+                              <video
+                                src={URL.createObjectURL(videoFile)}
+                                className="w-100 h-100 object-fit-cover rounded"
+                                controls
+                              />
+                              <button
+                                type="button"
+                                className="position-absolute top-0 end-0 bg-danger rounded-circle p-0 border-0 d-flex align-items-center justify-content-center"
+                                style={{ width: '20px', height: '20px', transform: 'translate(30%, -30%)' }}
+                                onClick={removeVideo}
+                              >
+                                <FiX className="text-white" style={{ fontSize: '10px' }} />
+                              </button>
+                            </>
+                          ) : (
+                            <label 
+                              htmlFor="video-upload"
+                              className="w-100 h-100 d-flex flex-column align-items-center justify-content-center cursor-pointer"
+                            >
+                              <FiPlus className="text-muted mb-1" />
+                              <small className="text-muted text-center" style={{ fontSize: '0.7rem' }}>
+                                Add Video
+                              </small>
+                            </label>
+                          )}
+                        </div>
+                      </div>
+                      <input
+                        type="file"
+                        id="video-upload"
+                        className="d-none"
+                        accept="video/*"
+                        onChange={handleVideoUpload}
+                      />
+                    </div>
+                  </div>
+                </div>
                 {/* Contact Information */}
                 <div className="mb-3 d-flex align-items-center">
                   <div className="row w-100">

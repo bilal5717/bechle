@@ -3,13 +3,13 @@ import React, { useState, useRef } from 'react';
 import { FiEdit, FiX, FiChevronDown, FiCheck, FiPlus, FiSearch, FiCalendar } from 'react-icons/fi';
 import Switch from '@/app/components/Buttons/Tooglebtn';
 
-const BikesPosting = () => {
+const BikesPosting = ({selectedSubCat,selectedType}) => {
   // State Management
   const [showCategoryModal, setShowCategoryModal] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState('Vehicles');
-  const [subCategory, setSubCategory] = useState('Select Sub Category');
+  const [subCategory, setSubCategory] = useState(selectedSubCat);
   const [showSubCategoryDropdown, setShowSubCategoryDropdown] = useState(false);
-  const [kind, setKind] = useState('');
+  const [kind, setKind] = useState(selectedType);
   const [make, setMake] = useState('');
   const [model, setModel] = useState('');
   const [year, setYear] = useState('');
@@ -46,23 +46,6 @@ const BikesPosting = () => {
     { id: 8, name: 'Business/Industrial/Agriculture', icon: '🏭' },
   ];
 
-  const subCategories = [
-    'MotorCycles',
-    'Spare Parts',
-    'Bike Accessories',
-    'Bicycle',
-    'ATV & Quads',
-    'Scooters',
-    'Others'
-  ];
-
-  const kindOptions = {
-    'MotorCycles': ['Sports & Heavy Bikes', 'Cruiser', 'Standard', 'Trail', 'Cafe Racers', 'Electric Bikes', 'Others'],
-    'Spare Parts': ['Air filter','Carburelors','Bearing','Side Mirrors','Motorcycle Batteries','Switches','Lighting','Cylinders','Clutches','Pistons','Chain,cover & sprockets','Brakes','Handle Bavs & Grips','Levers','Seats','Exhausts','Fuel Tanks','Horns','Speedometers','Plugs','Stands','Tyres & Tubes','Other spareparts','Body & Frume','Slincer','Steering','Suspension','Transmission'],
-    'Bike Accessories': ['Bicycle,Air pumps','Oil,Lubricants','Bike Covers','Bike Gloves','Helmets','Tail Boxes','Bike jackets','Bike locks','Safe Guards Other Bike-accessories','Chargers sticker & emblems'],
-    'Bicycle': ['Road Bikes','Mountain Bikes','Hybrid Bikes','BMX Bike','Electric Bicycle','Folding bikes','Other Bicycle'],
-    'Scooters': ['Petrol', 'Electric', 'Other']
-  };
 
   const makes = [
     'Honda', 'Yamaha', 'Suzuki','United', 'Road prince','Unique' ,'Super Power','Super Star','Metro','Crown','kawasaki','Power','Ravi','Eagle','Habib','Ghani','Sohrab','Benelli','Derbi','Zongshen','CF Moto','Cineco','Qingqi','Hero','speed','Lifan','Pak Hero','Safari','Super Asia','Toyo','Treet','Union Star','Other'
@@ -72,6 +55,7 @@ const BikesPosting = () => {
     'Honda': ['CBR', 'CB', 'CRF', 'Gold Wing', 'Other'],
     'Yamaha': ['YZF-R', 'MT', 'FZ', 'YZ', 'Other'],
     'Suzuki': ['GSX-R', 'Hayabusa', 'V-Strom', 'Other'],
+    'Kawasaki': ['Ninja', 'Z', 'Versys', 'Other'],
     'Kawasaki': ['Ninja', 'Z', 'Versys', 'Other'],
     'Harley-Davidson': ['Sportster', 'Softail', 'Touring', 'Other'],
     'Royal Enfield': ['Classic', 'Bullet', 'Himalayan', 'Other']
@@ -155,27 +139,7 @@ const BikesPosting = () => {
     </div>
   );
 
-  const renderSubCategoryDropdown = () => (
-    <div className="position-absolute top-100 start-0 end-0 bg-white border rounded shadow-sm z-1 mt-1">
-      <div className="max-h-200 overflow-auto">
-        {subCategories.map((category, index) => (
-          <div
-            key={index}
-            className={`p-2 cursor-pointer ${subCategory === category ? 'bg-light' : ''}`}
-            onClick={() => {
-              setSubCategory(category);
-              setShowSubCategoryDropdown(false);
-              setKind(''); // Reset kind when sub-category changes
-              setMake(''); // Reset make when sub-category changes
-              setModel(''); // Reset model when sub-category changes
-            }}
-          >
-            {category}
-          </div>
-        ))}
-      </div>
-    </div>
-  );
+ 
 
   return (
     <div className="container mt-4 mb-5">
@@ -212,55 +176,9 @@ const BikesPosting = () => {
 
             <div className="row align-items-around mb-3 p-3">
               <form onSubmit={handleSubmit}>
-                {/* Sub Category Dropdown */}
-                <div className="mb-3 d-flex align-items-center">
-                  <div className="row w-100">
-                    <div className="col-4">
-                      <label className="form-label"><b>Select Sub Category</b></label>
-                    </div>
-                    <div className="col-8 position-relative p-0">
-                      <div 
-                        className="form-control d-flex align-items-center cursor-pointer"
-                        onClick={() => setShowSubCategoryDropdown(!showSubCategoryDropdown)}
-                      >
-                        <span>{subCategory}</span>
-                        <FiChevronDown className="ms-auto" />
-                      </div>
-                      {showSubCategoryDropdown && renderSubCategoryDropdown()}
-                    </div>
-                  </div>
-                </div>
-
-                {/* What Kind Of Dropdown */}
-                {subCategory !== 'Select Sub Category' && subCategory !== 'ATV & Quads' &&(
-                  <div className="mb-3 d-flex align-items-center">
-                    <div className="row w-100">
-                      <div className="col-4">
-                        <label className="form-label"><b>What Kind of {subCategory}</b></label>
-                      </div>
-                      <div className="col-8 p-0">
-                        <select
-                          className="form-select"
-                          value={kind}
-                          onChange={(e) => {
-                            setKind(e.target.value);
-                            setMake(''); // Reset make when kind changes
-                            setModel(''); // Reset model when kind changes
-                          }}
-                          required
-                        >
-                          <option value="" disabled>Select Type</option>
-                          {kindOptions[subCategory]?.map((option, index) => (
-                            <option key={index} value={option}>{option}</option>
-                          ))}
-                        </select>
-                      </div>
-                    </div>
-                  </div>
-                )}
-
-             
-                  <div className="mb-3 d-flex align-items-center">
+               
+                  {subCategory !== 'Spare Parts'&& subCategory !== 'Bike Accessories'&&(
+                    <div className="mb-3 d-flex align-items-center">
                     <div className="row w-100">
                       <div className="col-4">
                         <label className="form-label"><b>Make</b></label>
@@ -283,10 +201,11 @@ const BikesPosting = () => {
                       </div>
                     </div>
                   </div>
+                  )}
             
 
                 {/* Model Dropdown */}
-                {make && (
+                {make  && subCategory !== 'Bicycle' &&(
                   <div className="mb-3 d-flex align-items-center">
                     <div className="row w-100">
                       <div className="col-4">
@@ -310,7 +229,7 @@ const BikesPosting = () => {
                 )}
 
                 {/* Year Dropdown with Custom Input */}
-{model && (
+{model && subCategory !== 'Spare Parts' && (
   <div className="mb-3 d-flex align-items-center">
     <div className="row w-100">
       <div className="col-4">
@@ -339,7 +258,7 @@ const BikesPosting = () => {
   </div>
 )}
                 {/* Engine Type */}
-                {kind !== 'Select Sub Category' && kind !== 'Electric Bikes' &&(
+                {subCategory !== 'Spare Parts' && kind !== 'Electric Bikes'&& kind !== 'Electric' && subCategory !== 'Bike Accessories' && subCategory !== 'Bicycle' &&(
                   <div className="mb-3 d-flex align-items-center">
                     <div className="row w-100">
                       <div className="col-4">
@@ -376,7 +295,7 @@ const BikesPosting = () => {
                  )}
 
                 {/* Engine Capacity */}
-                {kind !== 'Select Sub Category' && kind !== 'Electric Bikes' &&(
+                {subCategory !== 'Spare Parts' && kind !== 'Electric Bikes' && kind !== 'Electric'&& subCategory !== 'Bike Accessories' && subCategory !== 'Bicycle'&&(
                   <div className="mb-3 d-flex align-items-center">
                     <div className="row w-100">
                       <div className="col-4">
@@ -396,9 +315,30 @@ const BikesPosting = () => {
                     </div>
                   </div>
                  )}
+{/* Battery Capacity */}
+{(kind === 'Electric Bikes' || kind === 'Electric' )   && (
+  <div className="mb-3 d-flex align-items-center">
+    <div className="row w-100">
+      <div className="col-4">
+        <label className="form-label"><b>Battery Capacity (mAh)</b></label>
+      </div>
+      <div className="col-8 p-0">
+        <input
+          type="number"
+          className="form-control"
+          placeholder="Enter battery capacity"
+          value={engineCapacity}
+          min={0}
+          onChange={(e) => setEngineCapacity(e.target.value)}
+          required
+        />
+      </div>
+    </div>
+  </div>
+)}
 
                 {/* Kms Driven */}
-                {subCategory !== 'Select Sub Category' && subCategory !== 'ATV & Quads' &&(
+                {subCategory !== 'Spare Parts' && subCategory !== 'Bike Accessories' && subCategory !== 'Bicycle'  &&(
                   <div className="mb-3 d-flex align-items-center">
                     <div className="row w-100">
                       <div className="col-4">
@@ -421,7 +361,8 @@ const BikesPosting = () => {
             )}
                 {/* Ignition Type */}
                 
-                  <div className="mb-3 d-flex align-items-center">
+                  {selectedType !== 'Electric Bikes' && kind !== 'Electric' && subCategory !== 'Spare Parts' && subCategory !== 'Bike Accessories' && subCategory !== 'Bicycle' && subCategory !== 'ATV & Quads' &&(
+                    <div className="mb-3 d-flex align-items-center">
                     <div className="row w-100">
                       <div className="col-4">
                         <label className="form-label"><b>Ignition Type</b></label>
@@ -455,53 +396,56 @@ const BikesPosting = () => {
                     </div>
                   </div>
                
+                  )}
 
                 {/* Origin */}
                 
-                  <div className="mb-3 d-flex align-items-center">
-                    <div className="row w-100">
-                      <div className="col-4">
-                        <label className="form-label"><b>Origin</b></label>
-                      </div>
-                      <div className="col-8 p-0">
-                        <div className="btn-group w-100 gap-2" role="group">
-                          <input
-                            type="radio"
-                            className="btn-check"
-                            name="origin"
-                            id="originLocal"
-                            value="Local"
-                            checked={origin === 'Local'}
-                            onChange={() => setOrigin('Local')}
-                            required
-                          />
-                          <label className="btn btn-outline-secondary" htmlFor="originLocal">Local</label>
+                 { subCategory !== 'Bicycle' && subCategory !== 'ATV & Quads' &&  (
+                   <div className="mb-3 d-flex align-items-center">
+                   <div className="row w-100">
+                     <div className="col-4">
+                       <label className="form-label"><b>Origin</b></label>
+                     </div>
+                     <div className="col-8 p-0">
+                       <div className="btn-group w-100 gap-2" role="group">
+                         <input
+                           type="radio"
+                           className="btn-check"
+                           name="origin"
+                           id="originLocal"
+                           value="Local"
+                           checked={origin === 'Local'}
+                           onChange={() => setOrigin('Local')}
+                           required
+                         />
+                         <label className="btn btn-outline-secondary" htmlFor="originLocal">Local</label>
 
-                          <input
-                            type="radio"
-                            className="btn-check"
-                            name="origin"
-                            id="originImport"
-                            value="Import"
-                            checked={origin === 'Import'}
-                            onChange={() => setOrigin('Import')}
-                          />
-                          <label className="btn btn-outline-secondary" htmlFor="originImport">Import</label>
+                         <input
+                           type="radio"
+                           className="btn-check"
+                           name="origin"
+                           id="originImport"
+                           value="Import"
+                           checked={origin === 'Import'}
+                           onChange={() => setOrigin('Import')}
+                         />
+                         <label className="btn btn-outline-secondary" htmlFor="originImport">Import</label>
 
-                          <input
-                            type="radio"
-                            className="btn-check"
-                            name="origin"
-                            id="originChinese"
-                            value="Chinese"
-                            checked={origin === 'Chinese'}
-                            onChange={() => setOrigin('Chinese')}
-                          />
-                          <label className="btn btn-outline-secondary" htmlFor="originChinese">Chinese</label>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+                         <input
+                           type="radio"
+                           className="btn-check"
+                           name="origin"
+                           id="originChinese"
+                           value="Chinese"
+                           checked={origin === 'Chinese'}
+                           onChange={() => setOrigin('Chinese')}
+                         />
+                         <label className="btn btn-outline-secondary" htmlFor="originChinese">Chinese</label>
+                       </div>
+                     </div>
+                   </div>
+                 </div>
+                 )}
                 
 
                 {/* Condition */}
@@ -543,7 +487,8 @@ const BikesPosting = () => {
 
                 {/* Registration City */}
                
-                  <div className="mb-3 d-flex align-items-center">
+                  {subCategory !== 'Spare Parts' && subCategory !== 'Bike Accessories' && subCategory !== 'Bicycle' &&(
+                    <div className="mb-3 d-flex align-items-center">
                     <div className="row w-100">
                       <div className="col-4">
                         <label className="form-label"><b>Registration City</b></label>
@@ -563,6 +508,7 @@ const BikesPosting = () => {
                       </div>
                     </div>
                   </div>
+                  )}
                
 
                 <hr />

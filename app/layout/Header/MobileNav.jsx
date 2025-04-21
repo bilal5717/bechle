@@ -1,6 +1,5 @@
 import React from "react";
 import Link from "next/link";
-import "./header.css";
 
 const MobileNavigation = () => {
   const categories = ["Mens", "Womens", "Jewelry", "Perfume"];

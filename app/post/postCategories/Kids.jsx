@@ -3,12 +3,12 @@ import React, { useState } from 'react';
 import { FiEdit, FiX, FiChevronDown, FiCheck, FiPlus, FiSearch } from 'react-icons/fi';
 import Switch from '@/app/components/Buttons/Tooglebtn';
 
-const CreateKidsPost = () => {
+const CreateKidsPost = ({selectedSubCat,selectedType}) => {
   // State Management
   const [showCategoryModal, setShowCategoryModal] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState('Select Category');
-  const [selectedKidsType, setSelectedKidsType] = useState('Select Type');
-  const [selectedSubKidsType, setSelectedSubKidsType] = useState('Select Sub-Type');
+  const [selectedKidsType, setSelectedKidsType] = useState(selectedSubCat);
+  const [selectedSubKidsType, setSelectedSubKidsType] = useState(selectedType);
   const [brand, setBrand] = useState('');
   const [condition, setCondition] = useState('');
   const [ageRange, setAgeRange] = useState('');
@@ -128,7 +128,27 @@ const CreateKidsPost = () => {
     };
     console.log('Post submitted:', submissionData);
   };
-
+ const renderRadioGroup = ({ name, value, options, onChange, required = true }) => (
+    <div className="btn-group w-100 gap-2" role="group">
+      {options.map((option) => (
+        <React.Fragment key={option}>
+          <input
+            type="radio"
+            className="btn-check"
+            name={name}
+            id={`${name}${option}`}
+            value={option}
+            checked={value === option}
+            onChange={() => onChange(option)}
+            required={required}
+          />
+          <label className="btn btn-outline-secondary" htmlFor={`${name}${option}`}>
+            {option}
+          </label>
+        </React.Fragment>
+      ))}
+    </div>
+  );
   // Render Functions
   const renderCategoryModal = () => (
     <div className="modal fade show" style={{ display: 'block', backgroundColor: 'rgba(0,0,0,0.5)' }}>
@@ -170,41 +190,7 @@ const CreateKidsPost = () => {
     </div>
   );
 
-  const renderKidsTypeDropdown = () => (
-    <div className="position-absolute top-100 start-0 end-0 mx-5 bg-white border rounded shadow-sm z-1 mt-1">
-      <div className="max-h-200 overflow-auto">
-        <div className="p-2 border-bottom">
-          <div className="input-group">
-            <span className="input-group-text">
-              <FiSearch />
-            </span>
-            <input
-              type="text"
-              className="form-control"
-              placeholder="Search kids types..."
-              value={kidsTypeSearchTerm}
-              onChange={(e) => setKidsTypeSearchTerm(e.target.value)}
-              autoFocus
-            />
-          </div>
-        </div>
-        {filteredKidsTypes.map((type, index) => (
-          <div
-            key={index}
-            className={`p-2 cursor-pointer ${selectedKidsType === type ? 'bg-light' : ''}`}
-            onClick={() => {
-              setSelectedKidsType(type);
-              setSelectedSubKidsType('Select Sub-Type');
-              setShowKidsTypeDropdown(false);
-              setKidsTypeSearchTerm('');
-            }}
-          >
-            {type}
-          </div>
-        ))}
-      </div>
-    </div>
-  );
+
 
   return (
     <div className="container mt-4 mb-5">
@@ -241,23 +227,7 @@ const CreateKidsPost = () => {
 
             <div className="row align-items-around mb-3 p-3">
               <form onSubmit={handleSubmit}>
-                {/* Type Selection Field */}
-                <div className="mb-3 d-flex align-items-center">
-                  <div className="row w-100">
-                    <div className="col-4">
-                      <label className="form-label"><b>Select Sub Category</b></label>
-                    </div>
-                    <div className="col-8 position-relative p-0">
-                      <div 
-                        className="form-control d-flex align-items-center cursor-pointer"
-                        onClick={() => setShowKidsTypeDropdown(!showKidsTypeDropdown)}
-                      >
-                        <span>{selectedKidsType}</span>
-                      </div>
-                      {showKidsTypeDropdown && renderKidsTypeDropdown()}
-                    </div>
-                  </div>
-                </div>
+               
 
                 {/* Show type field only for specified categories */}
                 {showTypeFieldFor.includes(selectedKidsType) && kidsSubTypes[selectedKidsType] && (
@@ -284,48 +254,28 @@ const CreateKidsPost = () => {
                         </div>
                       </div>
                     </div>
-                    <hr />
                   </>
                 )}
-
-                {/* Kids Details Fields */}
-                {showKidsDetailsFields && (
-                  <>
-                    {/* Only show sub-type selection for Kids Vehicle, Baby Gear, and Kids Clothing */}
-                    {(selectedKidsType === 'Kids Vehicle' || 
-                      selectedKidsType === 'Baby Gear' || 
-                      selectedKidsType === 'Kids Clothing') && !showTypeFieldFor.includes(selectedKidsType) ? (
-                      <>
-                        {/* Sub-Type Selection */}
-                        <div className="mb-3 d-flex align-items-center">
-                          <div className="row w-100">
-                            <div className="col-4">
-                              <label className="form-label"><b>What Type Of {selectedKidsType}</b></label>
-                            </div>
-                            <div className="col-8 position-relative p-0">
-                              <select
-                                className="form-select"
-                                value={selectedSubKidsType}
-                                onChange={(e) => setSelectedSubKidsType(e.target.value)}
-                              >
-                                <option disabled>Select Sub-Type</option>
-                                {kidsSubTypes[selectedKidsType].map((subType, index) => (
-                                  <option key={index} value={subType}>
-                                    {subType}
-                                  </option>
-                                ))}
-                              </select>
-                            </div>
-                          </div>
-                        </div>
-                        <hr />
-                      </>
-                    ) : null}
-                    
-                    {/* Show details fields for all types except 'Others' */}
-                    <div className="">
-                      {/* Age Range Field - Only show for Kids Vehicle, Baby Gear, and Kids Clothing */}
-                      {(selectedKidsType === 'Kids Clothing') && (
+{/* Wifi Field */}
+{selectedSubCat && (
+   <div className="mb-3 d-flex align-items-center">
+   <div className="row w-100">
+     <div className="col-4">
+       <label className="form-label"><b>Condition</b></label>
+     </div>
+     <div className="col-8 p-0">
+       {renderRadioGroup({
+         name: 'condition',
+         value: condition,
+         options: ['New', 'Used'],
+         onChange: setCondition
+       })}
+     </div>
+   </div>
+ </div>
+)}
+ {/* Age Range Field - Only show for Kids Vehicle, Baby Gear, and Kids Clothing */}
+ {(selectedKidsType === 'Kids Clothing') && (
                         <div className="mb-3 d-flex align-items-center">
                           <div className="row w-100">
                             <div className="col-4">
@@ -365,12 +315,10 @@ const CreateKidsPost = () => {
                         </div>
                         
                       )}
-                    </div>
-                    
-                  </>
-                )}
                 
                 
+                
+<hr />
                 {/* Title Field */}
                 <div className="mb-3 d-flex align-items-center">
                   <div className="row w-100">

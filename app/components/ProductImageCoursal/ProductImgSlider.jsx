@@ -1,8 +1,7 @@
-import "react-responsive-carousel/lib/styles/carousel.min.css";
+
 import { Carousel } from "react-responsive-carousel";
 import { useState } from "react";
 import { LuChevronLeft, LuChevronRight, LuHeart, LuShare2 } from "react-icons/lu";
-import './ProductDetails.css';
 
 const ProductImageCarousel = () => {
     const [isVideoPlaying, setIsVideoPlaying] = useState(false);

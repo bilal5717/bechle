@@ -23,22 +23,8 @@ const CATEGORIES = [
   { id: 15, name: 'Others', icon: '🗂️', component: 'OthersPosting' },
 ];
 
-const SUB_CATEGORIES = [
-  'Cars',
-  'Cars On Installments',
-  'Car Care',
-  'Car Accessories',
-  'Spare Parts',
-  'Oil & Lubricant',
-  'Buses,Vans&Trucks',
-  'Rikshaw&Chingchi',
-  'Tractors&Trailers',
-  'Boats',
-  'Other Vehicles'
-];
 
 const VEHICLE_TYPE_OPTIONS = {
-  'Cars': ['Sedan', 'Hatchback', 'Coupe', 'Convertible', 'Other'],
   'Tractors&Trailers': ['Tractor', 'Trailer', 'Other'],
   'Rikshaw&Chingchi': ['Rikshaw', 'Chingchi', 'Other'],
   'Car Care': ['Air Fresher','Cleaners','Compound Polishes','Covers','Microfiber Clothes','Polishes','Presure Washers','Shampoos','waxes','Others'],
@@ -96,7 +82,7 @@ const MAKES = {
 };
 
 const MODELS = {
-  'Cars On Installments': ['Corolla', 'Camry', 'Prius', 'Hilux', 'Land Cruiser', 'Other'],
+  'Trailer': ['Corolla', 'Camry', 'Prius', 'Hilux', 'Land Cruiser', 'Other'],
   'Honda': ['Civic', 'Accord', 'City', 'CR-V', 'Other'],
   'Suzuki': ['Mehran', 'Cultus', 'Swift', 'Alto', 'Wagon R', 'Other'],
   'Nissan': ['Sunny', 'March', 'Sentra', 'Other'],
@@ -126,13 +112,14 @@ const REGISTRATION_CITIES = [
   'Quetta', 'Multan', 'Faisalabad', 'Hyderabad', 'Other'
 ];
 
-const VehiclesPosting = () => {
+const VehiclesPosting = ({selectedSubCat,selectedType}) => {
+ console.log(selectedSubCat,selectedType);
   // State Management
   const [showCategoryModal, setShowCategoryModal] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState('Vehicles');
-  const [subCategory, setSubCategory] = useState('Select Sub Category');
+  const [subCategory, setSubCategory] = useState(selectedSubCat);
   const [showSubCategoryDropdown, setShowSubCategoryDropdown] = useState(false);
-  const [vehicleType, setVehicleType] = useState('');
+  const [vehicleType, setVehicleType] = useState(selectedType);
   const [make, setMake] = useState('');
   const [model, setModel] = useState('');
   const [year, setYear] = useState('');
@@ -155,35 +142,49 @@ const VehiclesPosting = () => {
     title: '',
     description: '',
     contactName: '',
+    images: [],
   });
+  const [videoFile, setVideoFile] = useState(null);
 
+  // Add video upload handler
+  const handleVideoUpload = (e) => {
+    const file = e.target.files[0];
+    if (file && file.type.includes('video')) {
+      setVideoFile(file);
+    }
+  };
+  
+  // Add video remove handler
+  const removeVideo = () => {
+    setVideoFile(null);
+  };
   // Memoized derived values
   const isCarCare = useMemo(() => subCategory === 'Car Care', [subCategory]);
   const isOilLubricants = useMemo(() => subCategory === 'Oil & Lubricant', [subCategory]);
   const isSpareParts = useMemo(() => subCategory === 'Spare Parts', [subCategory]);
   const isCarAccessories = useMemo(() => subCategory === 'Car Accessories', [subCategory]);
-  const showKMSDriven = useMemo(() => ['Cars', 'Buses,Vans&Trucks'].includes(subCategory), [subCategory]);
-  const showNumberOfOwners = useMemo(() => ['Cars'].includes(subCategory), [subCategory]);
-  const showMonthlyInstall = useMemo(() => ['Cars On Installments'].includes(subCategory), [subCategory]);
+  const showKMSDriven = useMemo(() => [ 'Buses,Vans&Trucks'].includes(subCategory), [subCategory]);
   const showPrice = useMemo(() => subCategory !== 'Cars On Installments', [subCategory]);
   const showDownPayment = useMemo(() => subCategory === 'Cars On Installments', [subCategory]);
   const showRegistrationCity = useMemo(() => (
-    subCategory !== 'Cars On Installments' && subCategory !== 'Boats' && subCategory !== 'Select Sub Category'
+    subCategory !== 'Cars On Installments' && subCategory !== 'Boats' && subCategory !== 'Cars'
   ), [subCategory]);
-  
-  const showRegisteredField = useMemo(() => subCategory === 'Cars On Installments', [subCategory]);
+  const isCarsFlow = useMemo(() => ['Cars'].includes(subCategory), [subCategory]);
+const showModelForCars = useMemo(() => isCarsFlow && make, [isCarsFlow, make]);
+const showFieldsAfterModelForCars = useMemo(() => isCarsFlow && make && model, [isCarsFlow, make, model]);
+
+const isCarsOnInstallmentsFlow = useMemo(() => ['Cars On Installments'].includes(subCategory), [subCategory]);
+const showModelForInstallments = useMemo(() => isCarsOnInstallmentsFlow && make, [isCarsOnInstallmentsFlow, make]);
+const showFieldsAfterModelForInstallments = useMemo(() => isCarsOnInstallmentsFlow && make && model, [isCarsOnInstallmentsFlow, make, model]);
+
   const showVehicleTypeDropdown = useMemo(() => subCategory && VEHICLE_TYPE_OPTIONS[subCategory]?.length > 0, [subCategory]);
   const showMakeDropdown = useMemo(() => subCategory && subCategory !== 'Select Sub Category' && MAKES[subCategory]?.length > 0, [subCategory]);
-  const showModelDropdown = useMemo(() => ['Cars','Cars On Installments'].includes(subCategory), [subCategory]);
-  const showCondition = useMemo(() => ['Cars','Cars On Installments','Buses,Vans&Trucks'].includes(subCategory), [subCategory]);
+  const showModelDropdown = useMemo(() => ['Cars On Installments'].includes(subCategory), [subCategory]);
+  const showCondition = useMemo(() => ['Buses,Vans&Trucks'].includes(subCategory), [subCategory]);
   const showCarCareTypeOptions = useMemo(() => isCarCare && vehicleType && CAR_CARE_TYPES[vehicleType], [isCarCare, vehicleType]);
   const showCarAccessoriesTypeOptions = useMemo(() => isCarAccessories && vehicleType && CAR_ACCESSORIES_TYPES[vehicleType], [isCarAccessories, vehicleType]);
   const showSparePartsTypeOptions = useMemo(() => isSpareParts && vehicleType && SPARE_PARTS_TYPES[vehicleType], [isSpareParts, vehicleType]);
-  // Generate years array
-  const years = useMemo(() => {
-    const currentYear = new Date().getFullYear();
-    return Array.from({length: 30}, (_, i) => currentYear - i);
-  }, []);
+ 
   // Event Handlers
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -216,22 +217,13 @@ const VehiclesPosting = () => {
     // Here you would typically send this data to your backend
   };
 
-  const resetVehicleDetails = () => {
-    setVehicleType('');
-    setMake('');
-    setModel('');
-  };
 
   const handleCategorySelect = (categoryName) => {
     setSelectedCategory(categoryName);
     setShowCategoryModal(false);
   };
 
-  const handleSubCategorySelect = (category) => {
-    setSubCategory(category);
-    setShowSubCategoryDropdown(false);
-    resetVehicleDetails();
-  };
+ 
 
   // Reusable component functions
   const renderSelectInput = ({ 
@@ -256,7 +248,20 @@ const VehiclesPosting = () => {
       ))}
     </select>
   );
+  const handleImageUpload = (e) => {
+    const files = Array.from(e.target.files);
+    setPostDetails(prev => ({
+      ...prev,
+      images: [...prev.images, ...files.slice(0, 14 - prev.images.length)]
+    }));
+  };
 
+  const removeImage = (index) => {
+    setPostDetails(prev => ({
+      ...prev,
+      images: prev.images.filter((_, i) => i !== index)
+    }));
+  };
   const renderRadioGroup = ({ name, value, options, onChange, required = true }) => (
     <div className="btn-group w-100 gap-2" role="group">
       {options.map((option) => (
@@ -384,61 +389,8 @@ const VehiclesPosting = () => {
 
             <div className="row align-items-around mb-3 p-3">
               <form onSubmit={handleSubmit}>
-                {/* Sub Category Dropdown */}
-                <div className="mb-3 d-flex align-items-center">
-                  <div className="row w-100">
-                    <div className="col-4">
-                      <label className="form-label"><b>Select Sub Category</b></label>
-                    </div>
-                    <div className="col-8 position-relative p-0">
-                      <div 
-                        className="form-control d-flex align-items-center cursor-pointer"
-                        onClick={() => setShowSubCategoryDropdown(!showSubCategoryDropdown)}
-                        role="button"
-                        tabIndex={0}
-                      >
-                        <span>{subCategory}</span>
-                        <FiChevronDown className="ms-auto" />
-                      </div>
-                      {showSubCategoryDropdown && (
-                        <div className="position-absolute top-100 start-0 end-0 bg-white border rounded shadow-sm z-1 mt-1">
-                          <div className="max-h-200 overflow-auto">
-                            {SUB_CATEGORIES.map((category, index) => (
-                              <div
-                                key={index}
-                                className={`p-2 cursor-pointer ${subCategory === category ? 'bg-light' : ''}`}
-                                onClick={() => handleSubCategorySelect(category)}
-                              >
-                                {category}
-                              </div>
-                            ))}
-                          </div>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                </div>
-
-                {/* Vehicle Type Dropdown */}
-                {showVehicleTypeDropdown && (
-                  <div className="mb-3 d-flex align-items-center">
-                    <div className="row w-100">
-                      <div className="col-4">
-                        <label className="form-label"><b>What Kind Of {subCategory}</b></label>
-                      </div>
-                      <div className="col-8 p-0">
-                        {renderSelectInput({
-                          value: vehicleType,
-                          onChange: (e) => {
-                            setVehicleType(e.target.value);
-                          },
-                          options: VEHICLE_TYPE_OPTIONS[subCategory] || [],
-                          placeholder: 'Select Vehicle Type'
-                        })}
-                      </div>
-                    </div>
-                  </div>
-                )}
+                
+              
 
                 {/* Car Care Type Options */}
                 {showCarCareTypeOptions && (
@@ -523,11 +475,51 @@ const VehiclesPosting = () => {
             </div>
           </div>
         )}
+ {/* Make Dropdown - Show first for Cars On Installments */}
+ {isCarsOnInstallmentsFlow && (
+        <div className="mb-3 d-flex align-items-center">
+          <div className="row w-100">
+            <div className="col-4">
+              <label className="form-label"><b>Make</b></label>
+            </div>
+            <div className="col-8 p-0">
+              {renderSelectInput({
+                value: make,
+                onChange: (e) => {
+                  setMake(e.target.value);
+                  setModel('');
+                },
+                options: MAKES[subCategory] || [],
+                placeholder: 'Select Make'
+              })}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Model Dropdown - Show after make is selected for Cars On Installments */}
+      {showModelForInstallments && (
+        <div className="mb-3 d-flex align-items-center">
+          <div className="row w-100">
+            <div className="col-4">
+              <label className="form-label"><b>Model</b></label>
+            </div>
+            <div className="col-8 p-0">
+              {renderSelectInput({
+                value: model,
+                onChange: (e) => setModel(e.target.value),
+                options: MODELS[make] || [],
+                placeholder: 'Select Model'
+              })}
+            </div>
+          </div>
+        </div>
+      )}
 
                 {/* Make Dropdown */}
-                {showMakeDropdown && !isCarCare && !isCarAccessories && !isSpareParts && !isOilLubricants &&(
+                {isCarsFlow && !isCarCare && !isCarAccessories && !isSpareParts && !isOilLubricants && showMakeDropdown &&(
                   <div className="mb-3 d-flex align-items-center">
-                    <div className="row w-100">
+                    <div className="row w-100 mb-1">
                       <div className="col-4">
                         <label className="form-label"><b>Make</b></label>
                       </div>
@@ -541,13 +533,15 @@ const VehiclesPosting = () => {
                           options: MAKES[subCategory] || [],
                           placeholder: 'Select Make'
                         })}
+                        
+                      <hr />
                       </div>
                     </div>
                   </div>
                 )}
 
                 {/* Model Dropdown */}
-                {showModelDropdown && !isCarCare && !isCarAccessories && !isSpareParts && !isOilLubricants &&(
+                {showModelForCars && !isCarCare && !isCarAccessories && !isSpareParts && !isOilLubricants &&(
                   <div className="mb-3 d-flex align-items-center">
                     <div className="row w-100">
                       <div className="col-4">
@@ -560,13 +554,405 @@ const VehiclesPosting = () => {
                           options: MODELS[make] || [],
                           placeholder: 'Select Model'
                         })}
+                        
+                      <hr />
+                      </div>
+                    </div>
+                  </div>
+                )}
+{/* Rest of car-specific fields shown after model */}
+{showFieldsAfterModelForCars || subCategory === 'Spare Parts' && (
+  <>
+    {/* Example: Condition */}
+    <div className="mb-3 d-flex align-items-center">
+      <div className="row w-100">
+        <div className="col-4">
+          <label className="form-label"><b>Condition</b></label>
+        </div>
+        <div className="col-8 p-0">
+          {renderRadioGroup({
+            name: 'condition',
+            value: condition,
+            options: ['New', 'Used'],
+            onChange: setCondition
+          })}
+        </div>
+      </div>
+    </div>
+{/* Kms Driven */}
+{(
+                  <div className="mb-3 d-flex align-items-center">
+                    <div className="row w-100">
+                      <div className="col-4">
+                        <label className="form-label"><b>Kms Driven</b></label>
+                      </div>
+                      <div className="col-8 p-0">
+                        {renderTextInput({
+                          value: kmsDriven,
+                          onChange: (e) => setKmsDriven(e.target.value),
+                          placeholder: "Enter kilometers driven",
+                          type: 'number',
+                          min: 0
+                        })}
                       </div>
                     </div>
                   </div>
                 )}
 
+                {/* Year Dropdown with Custom Input */}
+                {(
+                  <div className="mb-3 d-flex align-items-center">
+                    <div className="row w-100">
+                      <div className="col-4">
+                        <label className="form-label"><b>Year</b></label>
+                      </div>
+                      <div className="col-8 p-0">
+                        {renderTextInput({
+                          value: year,
+                          onChange: (e) => setYear(e.target.value),
+                          placeholder: "Enter year (e.g., 2023)",
+                          type: 'number',
+                          min: 1900,
+                          max: 2100,
+                          icon: 'calendar'
+                        })}
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                 {/* Fuel Type */}
+                 {(
+                  <div className="mb-3 d-flex align-items-center">
+                    <div className="row w-100">
+                      <div className="col-4">
+                        <label className="form-label"><b>Fuel Type</b></label>
+                      </div>
+                      <div className="col-8 p-0">
+                        {renderSelectInput({
+                          value: fuelType,
+                          onChange: (e) => setFuelType(e.target.value),
+                          options: FUEL_TYPES,
+                          placeholder: 'Select Fuel Type'
+                        })}
+                      </div>
+                    </div>
+                  </div>
+                )}
+                 {/* Transmission */}
+                 {!isCarCare && !isCarAccessories && !isSpareParts && !isOilLubricants && subCategory !== 'Buses,Vans&Trucks' && subCategory !== 'Boats' && subCategory !== 'Cars' &&(
+                  <div className="mb-3 d-flex align-items-center">
+                    <div className="row w-100">
+                      <div className="col-4">
+                        <label className="form-label"><b>Transmission</b></label>
+                      </div>
+                      <div className="col-8 p-0">
+                        {renderSelectInput({
+                          value: transmission,
+                          onChange: (e) => setTransmission(e.target.value),
+                          options: TRANSMISSIONS,
+                          placeholder: 'Select Transmission'
+                        })}
+                      </div>
+                    </div>
+                  </div>
+                )}
+                 {/* Features - Only show for non-Car Care and non-Car Accessories items */}
+                 {!isCarCare && !isCarAccessories && !isSpareParts && !isOilLubricants && subCategory !== 'Buses,Vans&Trucks' && subCategory !== 'Boats' && subCategory !== 'Select Sub Category' &&<CarFeaturesSelection features={features} setFeatures={setFeatures} />}
+
+                  <div className="mb-3 d-flex align-items-center">
+                    <div className="row w-100">
+                      <div className="col-4">
+                        <label className="form-label"><b>Registration City</b></label>
+                      </div>
+                      <div className="col-8 p-0">
+                        {renderSelectInput({
+                          value: registrationCity,
+                          onChange: (e) => setRegistrationCity(e.target.value),
+                          options: REGISTRATION_CITIES,
+                          placeholder: 'Select Registration City'
+                        })}
+                      </div>
+                    </div>
+                  </div>
+                
+
+                  <div className="mb-3 d-flex align-items-center">
+                    <div className="row w-100">
+                      <div className="col-4">
+                        <label className="form-label"><b>Registered</b></label>
+                      </div>
+                      <div className="col-8 p-0">
+                        {renderRadioGroup({
+                          name: 'registered',
+                          value: registered,
+                          options: REGISTERED_OPTIONS,
+                          onChange: setRegistered
+                        })}
+                      </div>
+                    </div>
+                  </div>
+                
+
+               
+                  <div className="mb-3 d-flex align-items-center">
+                    <div className="row w-100">
+                      <div className="col-4">
+                        <label className="form-label"><b>Car Documents</b></label>
+                      </div>
+                      <div className="col-8 p-0">
+                        {renderRadioGroup({
+                          name: 'docType',
+                          value: docType,
+                          options: DOC_TYPES,
+                          onChange: setDocType
+                        })}
+                      </div>
+                    </div>
+                  </div>
+                
+
+                {/* Assembly */}
+                
+                  <div className="mb-3 d-flex align-items-center">
+                    <div className="row w-100">
+                      <div className="col-4">
+                        <label className="form-label"><b>Assembly</b></label>
+                      </div>
+                      <div className="col-8 p-0">
+                        {renderRadioGroup({
+                          name: 'assembly',
+                          value: assembly,
+                          options: ASSEMBLY_OPTIONS,
+                          onChange: setAssembly
+                        })}
+                      </div>
+                    </div>
+                  </div>
+                <hr />
+    {/* Add the rest of the car-related fields like kmsDriven, year, fuelType, transmission, features, registrationCity, numberOfOwners, body type, color, number of seats, car documents, assembly here in same format */}
+  </>
+)}
+{showFieldsAfterModelForInstallments && (
+        <>
+          {/* Year */}
+          <div className="mb-3 d-flex align-items-center">
+            <div className="row w-100">
+              <div className="col-4">
+                <label className="form-label"><b>Year</b></label>
+              </div>
+              <div className="col-8 p-0">
+                {renderTextInput({
+                  value: year,
+                  onChange: (e) => setYear(e.target.value),
+                  placeholder: "Enter year (e.g., 2023)",
+                  type: 'number',
+                  min: 1900,
+                  max: 2100,
+                  icon: 'calendar'
+                })}
+              </div>
+            </div>
+          </div>
+
+          {/* Condition */}
+          <div className="mb-3 d-flex align-items-center">
+            <div className="row w-100">
+              <div className="col-4">
+                <label className="form-label"><b>Condition</b></label>
+              </div>
+              <div className="col-8 p-0">
+                {renderRadioGroup({
+                  name: 'condition',
+                  value: condition,
+                  options: ['New', 'Used'],
+                  onChange: setCondition
+                })}
+              </div>
+            </div>
+          </div>
+
+          {/* Transmission */}
+          <div className="mb-3 d-flex align-items-center">
+            <div className="row w-100">
+              <div className="col-4">
+                <label className="form-label"><b>Transmission</b></label>
+              </div>
+              <div className="col-8 p-0">
+                {renderSelectInput({
+                  value: transmission,
+                  onChange: (e) => setTransmission(e.target.value),
+                  options: TRANSMISSIONS,
+                  placeholder: 'Select Transmission'
+                })}
+              </div>
+            </div>
+          </div>
+
+          {/* Registered */}
+          <div className="mb-3 d-flex align-items-center">
+            <div className="row w-100">
+              <div className="col-4">
+                <label className="form-label"><b>Registered</b></label>
+              </div>
+              <div className="col-8 p-0">
+                {renderRadioGroup({
+                  name: 'registered',
+                  value: registered,
+                  options: REGISTERED_OPTIONS,
+                  onChange: setRegistered
+                })}
+              </div>
+            </div>
+          </div>
+
+          {/* Monthly Installment */}
+          <div className="mb-3 d-flex align-items-center">
+            <div className="row w-100">
+              <div className="col-4">
+                <label className="form-label"><b>Monthly Installment</b></label>
+              </div>
+              <div className="col-8 p-0">
+                {renderTextInput({
+                  value: monthlyInstall,
+                  onChange: (e) => setMonthlyInstall(e.target.value),
+                  placeholder: "Enter Monthly Installment",
+                  type: 'number',
+                  min: 0,
+                  prefix: 'Rs'
+                })}
+              </div>
+            </div>
+          </div>
+
+          {/* Installment Plan */}
+          <div className="mb-3 d-flex align-items-center">
+            <div className="row w-100">
+              <div className="col-4">
+                <label className="form-label"><b>Installment Plan</b></label>
+              </div>
+              <div className="col-8 p-0">
+                {renderSelectInput({
+                  value: installPlan,
+                  onChange: (e) => setInstallPlan(e.target.value),
+                  options: INSTALL_PLANS,
+                  placeholder: 'Select Installment Plan'
+                })}
+              </div>
+            </div>
+          </div>
+
+          {/* Fuel Type */}
+          <div className="mb-3 d-flex align-items-center">
+            <div className="row w-100">
+              <div className="col-4">
+                <label className="form-label"><b>Fuel Type</b></label>
+              </div>
+              <div className="col-8 p-0">
+                {renderSelectInput({
+                  value: fuelType,
+                  onChange: (e) => setFuelType(e.target.value),
+                  options: FUEL_TYPES,
+                  placeholder: 'Select Fuel Type'
+                })}
+              </div>
+            </div>
+          </div>
+
+          {/* Body Type - You'll need to add BODY_TYPES constant */}
+          <div className="mb-3 d-flex align-items-center">
+            <div className="row w-100">
+              <div className="col-4">
+                <label className="form-label"><b>Body Type</b></label>
+              </div>
+              <div className="col-8 p-0">
+                {renderSelectInput({
+                  value: features.bodyType || '',
+                  onChange: (e) => setFeatures(prev => ({ ...prev, bodyType: e.target.value })),
+                  options: ['Sedan', 'Hatchback', 'SUV', 'Crossover', 'Coupe', 'Convertible', 'Wagon', 'Van', 'Other'],
+                  placeholder: 'Select Body Type'
+                })}
+              </div>
+            </div>
+          </div>
+
+          {/* Color */}
+          <div className="mb-3 d-flex align-items-center">
+            <div className="row w-100">
+              <div className="col-4">
+                <label className="form-label"><b>Color</b></label>
+              </div>
+              <div className="col-8 p-0">
+                {renderSelectInput({
+                  value: features.color || '',
+                  onChange: (e) => setFeatures(prev => ({ ...prev, color: e.target.value })),
+                  options: ['Black', 'White', 'Silver', 'Gray', 'Red', 'Blue', 'Green', 'Yellow', 'Other'],
+                  placeholder: 'Select Color'
+                })}
+              </div>
+            </div>
+          </div>
+
+          {/* Number of Seats */}
+          <div className="mb-3 d-flex align-items-center">
+            <div className="row w-100">
+              <div className="col-4">
+                <label className="form-label"><b>Number of Seats</b></label>
+              </div>
+              <div className="col-8 p-0">
+                {renderTextInput({
+                  value: features.seats || '',
+                  onChange: (e) => setFeatures(prev => ({ ...prev, seats: e.target.value })),
+                  placeholder: "Enter number of seats",
+                  type: 'number',
+                  min: 1,
+                  max: 10
+                })}
+              </div>
+            </div>
+          </div>
+
+          {/* Car Documents */}
+          <div className="mb-3 d-flex align-items-center">
+            <div className="row w-100">
+              <div className="col-4">
+                <label className="form-label"><b>Car Documents</b></label>
+              </div>
+              <div className="col-8 p-0">
+                {renderRadioGroup({
+                  name: 'docType',
+                  value: docType,
+                  options: DOC_TYPES,
+                  onChange: setDocType
+                })}
+              </div>
+            </div>
+          </div>
+
+          {/* Assembly */}
+          <div className="mb-3 d-flex align-items-center">
+            <div className="row w-100">
+              <div className="col-4">
+                <label className="form-label"><b>Assembly</b></label>
+              </div>
+              <div className="col-8 p-0">
+                {renderRadioGroup({
+                  name: 'assembly',
+                  value: assembly,
+                  options: ASSEMBLY_OPTIONS,
+                  onChange: setAssembly
+                })}
+              </div>
+            </div>
+          </div>
+
+          {/* Features */}
+          <CarFeaturesSelection features={features} setFeatures={setFeatures} />
+        </>
+      )}
+
                 {/* Condition */}
-                {showCondition && !isCarCare && !isCarAccessories && !isSpareParts && !isOilLubricants &&(
+                {showCondition && !isCarCare && !isCarAccessories && !isSpareParts && !isOilLubricants  &&(
                   <div className="mb-3 d-flex align-items-center">
                     <div className="row w-100">
                       <div className="col-4">
@@ -604,8 +990,47 @@ const VehiclesPosting = () => {
                   </div>
                 )}
 
-                {/* Year Dropdown with Custom Input */}
-                {!isCarCare && !isCarAccessories && !isSpareParts && !isOilLubricants && subCategory !== 'Boats'  && subCategory !== 'Select Sub Category' &&(
+                
+
+                {/* Fuel Type */}
+                {!isCarCare && !isCarAccessories && !isSpareParts && !isOilLubricants && subCategory !== 'Buses,Vans&Trucks' && subCategory !== 'Boats' && subCategory !== 'Cars On Installments'&& subCategory !== 'Cars' &&(
+                  <div className="mb-3 d-flex align-items-center">
+                    <div className="row w-100">
+                      <div className="col-4">
+                        <label className="form-label"><b>Engine Type</b></label>
+                      </div>
+                      <div className="col-8 p-0">
+                        {renderSelectInput({
+                          value: fuelType,
+                          onChange: (e) => setFuelType(e.target.value),
+                          options: FUEL_TYPES,
+                          placeholder: 'Select Fuel Type'
+                        })}
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {/* Transmission */}
+                {!isCarCare && !isCarAccessories && !isSpareParts && !isOilLubricants && subCategory !== 'Buses,Vans&Trucks' && subCategory !== 'Boats' && subCategory !== 'Cars' && subCategory !== 'Cars On Installments' &&(
+                  <div className="mb-3 d-flex align-items-center">
+                    <div className="row w-100">
+                      <div className="col-4">
+                        <label className="form-label"><b>Transmission</b></label>
+                      </div>
+                      <div className="col-8 p-0">
+                        {renderSelectInput({
+                          value: transmission,
+                          onChange: (e) => setTransmission(e.target.value),
+                          options: TRANSMISSIONS,
+                          placeholder: 'Select Transmission'
+                        })}
+                      </div>
+                    </div>
+                  </div>
+                )}
+{/* Year Dropdown with Custom Input */}
+{  !isCarAccessories && !isSpareParts && !isOilLubricants && subCategory !== 'Boats'  && subCategory !== 'Cars On Installments'  && subCategory !== 'Cars' &&(
                   <div className="mb-3 d-flex align-items-center">
                     <div className="row w-100">
                       <div className="col-4">
@@ -626,88 +1051,11 @@ const VehiclesPosting = () => {
                   </div>
                 )}
 
-                {/* Fuel Type */}
-                {!isCarCare && !isCarAccessories && !isSpareParts && !isOilLubricants && subCategory !== 'Buses,Vans&Trucks' && subCategory !== 'Boats' && subCategory !== 'Select Sub Category' &&(
-                  <div className="mb-3 d-flex align-items-center">
-                    <div className="row w-100">
-                      <div className="col-4">
-                        <label className="form-label"><b>Fuel Type</b></label>
-                      </div>
-                      <div className="col-8 p-0">
-                        {renderSelectInput({
-                          value: fuelType,
-                          onChange: (e) => setFuelType(e.target.value),
-                          options: FUEL_TYPES,
-                          placeholder: 'Select Fuel Type'
-                        })}
-                      </div>
-                    </div>
-                  </div>
-                )}
-
-                {/* Monthly Installment */}
-                {showMonthlyInstall && !isCarCare && !isCarAccessories && !isSpareParts && !isOilLubricants &&(
-                  <div className="mb-3 d-flex align-items-center">
-                    <div className="row w-100">
-                      <div className="col-4">
-                        <label className="form-label"><b>Monthly Installment</b></label>
-                      </div>
-                      <div className="col-8 p-0">
-                        {renderTextInput({
-                          value: monthlyInstall,
-                          onChange: (e) => setMonthlyInstall(e.target.value),
-                          placeholder: "Enter Monthly Installment",
-                          type: 'number',
-                          min: 0
-                        })}
-                      </div>
-                    </div>
-                  </div>
-                )}
-
-                {/* Installment Plan */}
-                {subCategory === 'Cars On Installments' && !isCarCare && !isCarAccessories && !isSpareParts && !isOilLubricants &&(
-                  <div className="mb-3 d-flex align-items-center">
-                    <div className="row w-100">
-                      <div className="col-4">
-                        <label className="form-label"><b>Installment Plan</b></label>
-                      </div>
-                      <div className="col-8 p-0">
-                        {renderSelectInput({
-                          value: installPlan,
-                          onChange: (e) => setInstallPlan(e.target.value),
-                          options: INSTALL_PLANS,
-                          placeholder: 'Select Installment Plan'
-                        })}
-                      </div>
-                    </div>
-                  </div>
-                )}
-
-                {/* Transmission */}
-                {!isCarCare && !isCarAccessories && !isSpareParts && !isOilLubricants && subCategory !== 'Buses,Vans&Trucks' && subCategory !== 'Boats' && subCategory !== 'Select Sub Category' &&(
-                  <div className="mb-3 d-flex align-items-center">
-                    <div className="row w-100">
-                      <div className="col-4">
-                        <label className="form-label"><b>Transmission</b></label>
-                      </div>
-                      <div className="col-8 p-0">
-                        {renderSelectInput({
-                          value: transmission,
-                          onChange: (e) => setTransmission(e.target.value),
-                          options: TRANSMISSIONS,
-                          placeholder: 'Select Transmission'
-                        })}
-                      </div>
-                    </div>
-                  </div>
-                )}
-
                 {/* Features - Only show for non-Car Care and non-Car Accessories items */}
-                {!isCarCare && !isCarAccessories && !isSpareParts && !isOilLubricants && subCategory !== 'Buses,Vans&Trucks' && subCategory !== 'Boats' && subCategory !== 'Select Sub Category' &&<CarFeaturesSelection features={features} setFeatures={setFeatures} />}
+                {!isCarCare && !isCarAccessories && !isSpareParts && !isOilLubricants && subCategory !== 'Buses,Vans&Trucks' && subCategory !== 'Boats' && subCategory !== 'Cars' && subCategory !== 'Cars On Installments' &&<CarFeaturesSelection features={features} setFeatures={setFeatures} />}
 
                 {/* Number of Owners */}
-                {showNumberOfOwners && !isCarCare && !isCarAccessories && !isSpareParts && !isOilLubricants &&(
+                {showFieldsAfterModelForCars && !isCarCare && !isCarAccessories && !isSpareParts && !isOilLubricants &&(
                   <div className="mb-3 d-flex align-items-center">
                     <div className="row w-100">
                       <div className="col-4">
@@ -727,7 +1075,7 @@ const VehiclesPosting = () => {
                 )}
 
                 {/* Registration City */}
-                {showRegistrationCity && !isCarCare && !isCarAccessories && !isSpareParts && !isOilLubricants && subCategory !== 'Buses,Vans&Trucks' &&(
+                {showFieldsAfterModelForCars && showRegistrationCity && !isCarCare && !isCarAccessories && !isSpareParts && !isOilLubricants && subCategory !== 'Buses,Vans&Trucks' &&(
                   <div className="mb-3 d-flex align-items-center">
                     <div className="row w-100">
                       <div className="col-4">
@@ -745,27 +1093,10 @@ const VehiclesPosting = () => {
                   </div>
                 )}
 
-                {/* Registered field */}
-                {showRegisteredField && !isCarCare && !isCarAccessories && !isSpareParts && !isOilLubricants &&(
-                  <div className="mb-3 d-flex align-items-center">
-                    <div className="row w-100">
-                      <div className="col-4">
-                        <label className="form-label"><b>Registered</b></label>
-                      </div>
-                      <div className="col-8 p-0">
-                        {renderRadioGroup({
-                          name: 'registered',
-                          value: registered,
-                          options: REGISTERED_OPTIONS,
-                          onChange: setRegistered
-                        })}
-                      </div>
-                    </div>
-                  </div>
-                )}
+             
 
                 {/* Document Type */}
-                {!isCarCare && !isCarAccessories && !isSpareParts && !isOilLubricants && subCategory !== 'Buses,Vans&Trucks' && subCategory !== 'Boats' && subCategory !== 'Select Sub Category'&&(
+                {showFieldsAfterModelForCars && !isCarCare && !isCarAccessories && !isSpareParts && !isOilLubricants && subCategory !== 'Buses,Vans&Trucks' && subCategory !== 'Boats' && subCategory !== 'Cars'&&(
                   <div className="mb-3 d-flex align-items-center">
                     <div className="row w-100">
                       <div className="col-4">
@@ -784,7 +1115,7 @@ const VehiclesPosting = () => {
                 )}
 
                 {/* Assembly */}
-                {!isCarCare && !isCarAccessories && !isSpareParts && !isOilLubricants && subCategory !== 'Buses,Vans&Trucks' && subCategory !== 'Boats' && subCategory !== 'Select Sub Category' &&(
+                {!isCarCare && !isCarAccessories && !isSpareParts && !isOilLubricants && subCategory !== 'Buses,Vans&Trucks' && subCategory !== 'Boats' && subCategory !== 'Cars' && subCategory !== 'Cars On Installments' &&(
                   <div className="mb-3 d-flex align-items-center">
                     <div className="row w-100">
                       <div className="col-4">
@@ -802,7 +1133,6 @@ const VehiclesPosting = () => {
                   </div>
                 )}
 
-                <hr />
 
                 {/* Product/Service Title */}
                 <div className="mb-3 d-flex align-items-center">
@@ -900,6 +1230,115 @@ const VehiclesPosting = () => {
                   </div>
                 )}
 
+<div className="mb-4">
+                  <div className="row w-100">
+                    <div className="col-4"><label className="form-label fw-bold">Upload Images</label></div>
+                    <div className="col-8 p-0">
+                      <div className="d-flex flex-wrap gap-2">
+                        {Array.from({ length: 14 }).map((_, index) => (
+                          <div 
+                            key={index} 
+                            className="border rounded position-relative"
+                            style={{
+                              width: '60px',
+                              height: '60px',
+                              backgroundColor: '#f7f7f7'
+                            }}
+                          >
+                            {postDetails.images[index] ? (
+                              <>
+                                <img
+                                  src={URL.createObjectURL(postDetails.images[index])}
+                                  alt={`Preview ${index}`}
+                                  className="w-100 h-100 object-fit-cover rounded"
+                                />
+                                <button
+                                  type="button"
+                                  className="position-absolute top-0 end-0 bg-danger rounded-circle p-0 border-0 d-flex align-items-center justify-content-center"
+                                  style={{ width: '20px', height: '20px', transform: 'translate(30%, -30%)' }}
+                                  onClick={() => removeImage(index)}
+                                >
+                                  <FiX className="text-white" style={{ fontSize: '10px' }} />
+                                </button>
+                              </>
+                            ) : (
+                              <label 
+                                htmlFor="image-upload"
+                                className="w-100 h-100 d-flex flex-column align-items-center justify-content-center cursor-pointer"
+                              >
+                                <FiPlus className="text-muted mb-1" />
+                              </label>
+                            )}
+                          </div>
+                        ))}
+                      </div>
+                      <input
+                        type="file"
+                        id="image-upload"
+                        className="d-none"
+                        accept="image/*"
+                        multiple
+                        onChange={handleImageUpload}
+                        disabled={postDetails.images.length >= 14}
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Video Upload Field */}
+                <div className="mb-4">
+                  <div className="row w-100">
+                    <div className="col-4"> <label className="form-label fw-bold">Upload Video</label></div>
+                    <div className="col-8 p-0">
+                      <div className="d-flex">
+                        <div 
+                          className="border rounded position-relative"
+                          style={{
+                            width: '100%',
+                            height: '120px',
+                            backgroundColor: '#f7f7f7'
+                          }}
+                        >
+                          {videoFile ? (
+                            <>
+                              <video
+                                src={URL.createObjectURL(videoFile)}
+                                className="w-100 h-100 object-fit-cover rounded"
+                                controls
+                              />
+                              <button
+                                type="button"
+                                className="position-absolute top-0 end-0 bg-danger rounded-circle p-0 border-0 d-flex align-items-center justify-content-center"
+                                style={{ width: '20px', height: '20px', transform: 'translate(30%, -30%)' }}
+                                onClick={removeVideo}
+                              >
+                                <FiX className="text-white" style={{ fontSize: '10px' }} />
+                              </button>
+                            </>
+                          ) : (
+                            <label 
+                              htmlFor="video-upload"
+                              className="w-100 h-100 d-flex flex-column align-items-center justify-content-center cursor-pointer"
+                            >
+                              <FiPlus className="text-muted mb-1" />
+                              <small className="text-muted text-center" style={{ fontSize: '0.7rem' }}>
+                                Add Video
+                              </small>
+                            </label>
+                          )}
+                        </div>
+                      </div>
+                      <input
+                        type="file"
+                        id="video-upload"
+                        className="d-none"
+                        accept="video/*"
+                        onChange={handleVideoUpload}
+                      />
+                    </div>
+                  </div>
+                </div>
+                
                 {/* Down Payment */}
                 {showDownPayment && !isCarCare && !isCarAccessories && (
                   <div className="mb-3 d-flex align-items-center">
@@ -966,17 +1405,7 @@ const VehiclesPosting = () => {
                   </div>
                 </div>
 
-                {/* Show Phone Number Toggle */}
-                <div className="mb-3 d-flex align-items-center">
-                  <div className="row w-100">
-                    <div className="col-5">
-                      <label className="form-label"><b>Show My Phone Number</b></label>
-                    </div>
-                    <div className="col-7 p-0 text-end d-flex align-items-end justify-content-end">
-                      <Switch />
-                    </div>
-                  </div>
-                </div>
+               
 
                 <button type="submit" className="btn btn-warning w-100 fw-bold">
                   Post Now

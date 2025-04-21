@@ -3,11 +3,11 @@ import React, { useState } from 'react';
 import { FiEdit, FiX, FiChevronDown, FiCheck, FiPlus, FiSearch } from 'react-icons/fi';
 import Switch from '@/app/components/Buttons/Tooglebtn';
 
-const JobPostingForm = () => {
+const JobPostingForm = ({selectedSubCat,selectedType}) => {
   // State Management
   const [showCategoryModal, setShowCategoryModal] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState('Jobs');
-  const [jobType, setJobType] = useState('Select Job Type');
+  const [jobType, setJobType] = useState(selectedSubCat);
   const [hiringType, setHiringType] = useState('company');
   const [companyName, setCompanyName] = useState('');
   const [salaryFrom, setSalaryFrom] = useState('');
@@ -86,10 +86,7 @@ const JobPostingForm = () => {
     'Temporary'
   ];
 
-  // Derived Values
-  const filteredJobTypes = jobTypes.filter(option => 
-    option.toLowerCase().includes(jobTypeSearchTerm.toLowerCase())
-  );
+ 
 
   // Event Handlers
   const handleInputChange = (e) => {
@@ -156,41 +153,6 @@ const JobPostingForm = () => {
     </div>
   );
 
-  const renderJobTypeDropdown = () => (
-    <div className="position-absolute top-100 start-0 end-0 mx-5 bg-white border rounded shadow-sm z-1 mt-1">
-      <div className="max-h-200 overflow-auto">
-        <div className="p-2 border-bottom">
-          <div className="input-group">
-            <span className="input-group-text">
-              <FiSearch />
-            </span>
-            <input
-              type="text"
-              className="form-control"
-              placeholder="Search job types..."
-              value={jobTypeSearchTerm}
-              onChange={(e) => setJobTypeSearchTerm(e.target.value)}
-              autoFocus
-            />
-          </div>
-        </div>
-        {filteredJobTypes.map((type, index) => (
-          <div
-            key={index}
-            className={`p-2 cursor-pointer ${jobType === type ? 'bg-light' : ''}`}
-            onClick={() => {
-              setJobType(type);
-              setShowJobTypeDropdown(false);
-              setJobTypeSearchTerm('');
-            }}
-          >
-            {type}
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-
   return (
     <div className="container mt-4 mb-5">
       <div className="row justify-content-center">
@@ -226,23 +188,7 @@ const JobPostingForm = () => {
 
             <div className="row align-items-around mb-3 p-3">
               <form onSubmit={handleSubmit}>
-                {/* Job Type Selection */}
-                <div className="mb-3 d-flex align-items-center">
-                  <div className="row w-100">
-                    <div className="col-4">
-                      <label className="form-label"><b>Job Type</b></label>
-                    </div>
-                    <div className="col-8 position-relative p-0">
-                      <div 
-                        className="form-control d-flex align-items-center cursor-pointer"
-                        onClick={() => setShowJobTypeDropdown(!showJobTypeDropdown)}
-                      >
-                        <span>{jobType}</span>
-                      </div>
-                      {showJobTypeDropdown && renderJobTypeDropdown()}
-                    </div>
-                  </div>
-                </div>
+                
 
                 {/* Hiring Type Selection */}
                 <div className="mb-3 d-flex align-items-center">

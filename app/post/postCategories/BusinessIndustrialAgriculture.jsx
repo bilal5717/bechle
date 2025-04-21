@@ -3,11 +3,11 @@ import React, { useState } from 'react';
 import { FiEdit, FiX, FiChevronDown, FiCheck, FiPlus, FiSearch } from 'react-icons/fi';
 import Switch from '@/app/components/Buttons/Tooglebtn';
 
-const BusinessIndustrialForm = () => {
+const BusinessIndustrialForm = ({selectedSubCat,selectedType}) => {
   // State Management
   const [showCategoryModal, setShowCategoryModal] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState('Business/Industrial/Agriculture');
-  const [businessType, setBusinessType] = useState('Select Business Type');
+  const [businessType, setBusinessType] = useState(selectedType);
   const [sellerType, setSellerType] = useState('business');
   const [companyName, setCompanyName] = useState('');
   const [price, setPrice] = useState('');
@@ -17,7 +17,7 @@ const BusinessIndustrialForm = () => {
   const [showBusinessTypeDropdown, setShowBusinessTypeDropdown] = useState(false);
   const [businessTypeSearchTerm, setBusinessTypeSearchTerm] = useState('');
   const [location, setLocation] = useState('');
-  const [specialField, setSpecialField] = useState('');
+  const [specialField, setSpecialField] = useState(selectedType);
   const [subCategory, setSubCategory] = useState('');
   const [postDetails, setPostDetails] = useState({
     title: '',
@@ -232,57 +232,15 @@ const BusinessIndustrialForm = () => {
 
             <div className="row align-items-around mb-3 p-3">
               <form onSubmit={handleSubmit}>
-                <div className="mb-3 d-flex align-items-center">
-                  <div className="row w-100">
-                    <div className="col-4">
-                      <label className="form-label"><b>Select Sub Category</b></label>
-                    </div>
-                    <div className="col-8 position-relative p-0">
-                      <div 
-                        className="form-control d-flex align-items-center cursor-pointer"
-                        onClick={() => setShowBusinessTypeDropdown(!showBusinessTypeDropdown)}
-                      >
-                        <span>{businessType}</span>
-                        <FiChevronDown className="ms-auto" />
-                      </div>
-                      {showBusinessTypeDropdown && renderBusinessTypeDropdown()}
-                    </div>
-                  </div>
-                </div>
-
-                {/* Special Field Dropdown (Conditional) */}
-                {hasSpecialField && (
-                  <div className="mb-3 d-flex align-items-center">
-                    <div className="row w-100">
-                      <div className="col-4">
-                        <label className="form-label"><b>What Kind of {businessType}</b></label>
-                      </div>
-                      <div className="col-8 p-0">
-                        <select
-                          className="form-select"
-                          value={specialField}
-                          onChange={(e) => {
-                            setSpecialField(e.target.value);
-                            setSubCategory(''); // Reset sub-category when special field changes
-                          }}
-                          required
-                        >
-                          <option value="" disabled>Select Business Type</option>
-                          {specialFields[businessType].map((field, index) => (
-                            <option key={index} value={field}>{field}</option>
-                          ))}
-                        </select>
-                      </div>
-                    </div>
-                  </div>
-                )}
+                
+                
 
                 {/* Sub-Category Dropdown (Conditional) */}
-                {showSubCategory && (
+                { selectedType === 'Baking equipment' || selectedType === 'Food display counters' || selectedType === 'Ovens & Tandoor' || selectedType === 'Farm Machinery and equipment' &&(
                   <div className="mb-3 d-flex align-items-center">
                     <div className="row w-100">
                       <div className="col-4">
-                        <label className="form-label"><b>Type of {specialField}</b></label>
+                        <label className="form-label"><b>Type of {selectedType}</b></label>
                       </div>
                       <div className="col-8 p-0">
                         <select
@@ -301,7 +259,6 @@ const BusinessIndustrialForm = () => {
                   </div>
                 )}
                 
-                <hr />
 
                 {/* Product/Service Title */}
                 <div className="mb-3 d-flex align-items-center">
